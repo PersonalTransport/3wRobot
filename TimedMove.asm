@@ -17,13 +17,13 @@
 TMOV:	    code	    0x200
 TMOVE:	    MOVLW	    0xF8
 	    ANDWF	    MOVECON,	    0		    ; Duration bits copied from MOVECON
-	    MOVWF	    TEMP			    ; Moved into a temporary registry
-	    RRNCF	    TEMP
-	    RRNCF	    TEMP
-	    RRNCF	    TEMP			    ; Rotated into correct position
-	    INCF	    TEMP			    ; Incriment to reflect min .1 sec move
+	    MOVWF	    TEMPR			    ; Moved into a temporary registry
+	    RRNCF	    TEMPR
+	    RRNCF	    TEMPR
+	    RRNCF	    TEMPR			    ; Rotated into correct position
+	    INCF	    TEMPR			    ; Incriment to reflect min .1 sec move
 	    MOVLW	    0x9D			    ; .157 tics ~ .1 sec, converts tics to 
-	    MULWF	    TEMP			    ; desired duration (48 microsecond variance)
+	    MULWF	    TEMPR			    ; desired duration (48 microsecond variance)
 	    INCF	    PRODL			    ; Add 1 to result to account for timer roll over
 	    SETF	    TMR3L
 	    SETF	    TMR3H			    ; Set timers to prepare for subtraction
