@@ -1,0 +1,67 @@
+MPASM 5.62                          MAIN.ASM   11-13-2015  11:38:36         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;------------------------------------------------------------------------------------- 
+                      00002 ; FILE: main.asm
+                      00003 ; DESC: Main file to test various capabilities
+                      00004 ; DATE: 11-10-15
+                      00005 ; AUTH: Marie Bomber 
+                      00006 ; DEVICE: PICmicro (PIC18F1220) 
+                      00007 ;------------------------------------------------------------------------------------- 
+                      00008             list           p=18F1220                       ; Set processor type 
+                      00009             radix          hex                             ; Sets the default radix for data exp. 
+                      00010     
+  0000                00011             EXTERN          INITIALIZE, DISABLE, TMOVE
+                      00012 
+                      00013 #INCLUDE    3WheelInclude.inc
+                      00001 #DEFINE TMOVCON 0x90            ;Configure Register for Timed Move Command
+                      00002 #DEFINE SMOVCON 0x91            ;Configure Register for Sense Move Command
+                      00003 #DEFINE TEMP    0x92            ;Placeholder register for any calls
+                      00004 #DEFINE TCOUNT  0x93            ;Stage counter for Timed move
+                      00005 #DEFINE SCOUNT  0x94            ;Stage counter for Sense commands
+                      00006 
+                      00007 
+                      00014             
+                      00015 BEGIN:      code        0x000
+000000 EF?? F???      00016             GOTO        Start
+                      00017             
+                      00018 INTERRUPT:  code        0x018
+000018 EC?? F???      00019             CALL        DISABLE
+00001C 0010           00020             RETFIE
+                      00021             
+                      00022 MAIN:       code        0x100
+000100 EC?? F???      00023 Start:      CALL        INITIALIZE
+000104 0E48           00024             MOVLW       0x48
+000106 6F90           00025             MOVWF       TMOVCON
+000108 EC?? F???      00026             CALL        TMOVE
+00010C D???           00027             BRA         Wait
+                      00028             
+00010E D???           00029 Wait:       BRA         Wait
+                      00030     
+                      00031             End
+MPASM 5.62                          MAIN.ASM   11-13-2015  11:38:36         PAGE  2
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+DISABLE                           00000000
+INITIALIZE                        00000000
+SCOUNT                            0x94
+SMOVCON                           0x91
+Start                             00000100
+TCOUNT                            0x93
+TEMP                              0x92
+TMOVCON                           0x90
+TMOVE                             00000000
+Wait                              0000010E
+__18F1220                         00000001
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+

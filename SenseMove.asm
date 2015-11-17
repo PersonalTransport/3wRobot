@@ -16,23 +16,31 @@
 SMOV:	   code		    0x400
 SMOVE:	   CALL		    GROUND			    ; Ground echo pins to insure proper functionality of sensor
 	   MOVLW	    0x05	        
-	   MOVWF	    WREG			    ; Prepare WREG for sensor set up
+	   CALL		    TRIGGER
+	   MOVLW	    0x0F			    ; Default to forward motion (01 us)
+	   BTFSS	    SMOVCON,	    0		    ; Test for R turn		(02-3 us)
+	   BCF		    WREG,	    2
+	   BTFSS	    SMOVCON,	    1		    ; Test for L turn		(04-5 us)
+	   BCF		    WREG,	    1		    
+	   MOVWF	    PORTA			    ; Begin motion		(06 us)
+	   CLRF		    TEMPR			    ; Clear R sensor count	(07 us)
+	   CLRF		    TEMPL			    ; Clear L sensor count	(08 us)
+	   MOVLW	    				    ;				(09 us)
+	   MOVWF	    SLOOK			    ;				(10 us)
+	   NOP						    ; Buffer			(11 us)
+	   CLRF		    PORTB			    ; Clear triggers
+LOOK:	   BTFSC	    PORTB,	    RB2		    ; Begin detection loop
+	   INCF		    TEMPR
+	   BTFSC	    PORTB	    RB1
+	   INCF		    TEMPL
+	   DECF		    SLOOK
+	   
+TRIGGER:   MOVWF	    WREG			    ; Prepare WREG for sensor set up
 	   BTFSC	    SMOVCON,	    2		    ; Test for use of R Sensor
 	   BCF		    WREG,	    0		    ; If R sensor only is needed, clear L sensor trigger bit
 	   BTFSC	    SMOVCON,	    3		    ; Test for use of L Sensor
 	   BCF		    WREG,	    3		    ; If L sensor only is needed, clear R sensor trigger bit
-	   MOVWF	    PORTB			    ; Set Trigger ~10 us before sense loop begins
-	   MOVLW	    0x0F			    ; Default to forward motion (1 cycle)
-	   BTFSS	    SMOVCON,	    0		    ; Test for R turn		(2-3 cycle)
-	   BCF		    WREG,	    2
-	   BTFSS	    SMOVCON,	    1		    ; Test for L turn		(4-5 cycle)
-	   BCF		    WREG,	    1		    
-	   MOVWF	    PORTA			    ; Begin motion		(6 cycle)
-	   CLRF		    TEMPR			    ; Clear R sensor count	(7 cycle)
-	   CLRF		    TEMPL			    ; Clear L sensor count	(8 cycle)
-	   
-	   
-	   
+	   MOVWF	    PORTB			    ; Set Trigger ~10 us before sense loop begins	   
 	   
     
     
