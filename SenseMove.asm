@@ -23,7 +23,7 @@ SMOVE:	   CALL		    GROUND			    ; Ground echo pins to insure proper functionali
 	   BTFSS	    SMOVCON,	    1		    ; Test for L turn		(04-5 us)
 	   BCF		    WREG,	    1		    
 	   MOVWF	    PORTA			    ; Begin motion		(06 us)
-	   CLRF		    TEMPR			    ; Clear R sensor count	(07 us)
+LOOKAGAIN: CLRF		    TEMPR			    ; Clear R sensor count	(07 us)
 	   CLRF		    TEMPL			    ; Clear L sensor count	(08 us)
 	   MOVLW	    				    ;				(09 us)
 	   MOVWF	    SLOOK			    ;				(10 us)
@@ -33,7 +33,11 @@ LOOK:	   BTFSC	    PORTB,	    RB2		    ; Begin detection loop
 	   INCF		    TEMPR
 	   BTFSC	    PORTB	    RB1
 	   INCF		    TEMPL
+	   MOVLW	    0x02
+	   
 	   DECF		    SLOOK
+	   BNZ		    LOOK
+	   
 	   
 TRIGGER:   MOVWF	    WREG			    ; Prepare WREG for sensor set up
 	   BTFSC	    SMOVCON,	    2		    ; Test for use of R Sensor
