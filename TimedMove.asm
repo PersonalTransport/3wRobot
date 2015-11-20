@@ -16,7 +16,7 @@
 	    
 TMOV:	    code	    0x200
 TMOVE:	    MOVLW	    0xF8
-	    ANDWF	    MOVECON,	    0		    ; Duration bits copied from MOVECON
+	    ANDWF	    TMOVCON,	    0		    ; Duration bits copied from MOVECON
 	    MOVWF	    TEMPR			    ; Moved into a temporary registry
 	    RRNCF	    TEMPR
 	    RRNCF	    TEMPR
@@ -34,7 +34,7 @@ TMOVE:	    MOVLW	    0xF8
 	    BTFSS 	    TMOVCON,	    0
 	    MOVLW	    0x0F			    ; Prepare PORTA to move Forward
 	    BTFSC	    TMOVCON,	    0
-	    MOVLW	    0x06			    ; Prepare PORTA to reverse
+	    MOVLW	    0x0A			    ; Prepare PORTA to reverse
 	    MOVWF	    PORTA
 	    BTFSC	    TMOVCON,	    1		    ; Test for R turn
 	    CALL	    RRTEST
