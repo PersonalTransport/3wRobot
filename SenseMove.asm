@@ -1,7 +1,7 @@
 ;------------------------------------------------------------------------------------- 
 ; FILE: TimedMove.asm
 ; DESC: Repository for any calls related to sensed motion of the car
-; DATE: 11-16-15
+; DATE: 12-01-15
 ; AUTH: Marie Bomber 
 ; DEVICE: PICmicro (PIC18F1220) 
 ;------------------------------------------------------------------------------------- 
@@ -25,19 +25,20 @@ SMOVE:	   CALL		    GROUND			    ; Ground echo pins to insure proper functionali
 	   MOVWF	    PORTA			    ; Begin motion		(06 us)
 LOOKAGAIN: CLRF		    TEMPR			    ; Clear R sensor count	(07 us)
 	   CLRF		    TEMPL			    ; Clear L sensor count	(08 us)
-	   MOVLW	    				    ;				(09 us)
+	   ;MOVLW	    				    ;				(09 us)
 	   MOVWF	    SLOOK			    ;				(10 us)
 	   NOP						    ; Buffer			(11 us)
 	   CLRF		    PORTB			    ; Clear triggers
 LOOK:	   BTFSC	    PORTB,	    RB2		    ; Begin detection loop
 	   INCF		    TEMPR
-	   BTFSC	    PORTB	    RB1
-	   INCF		    TEMPL
-	   MOVLW	    0x02
-	   
+	   BTFSC	    PORTB,	    RB1
+	   CALL		    LOOKL	   
 	   DECF		    SLOOK
 	   BNZ		    LOOK
-	   
+	   CALL		    GROUND			    ; Ground echo pins to insure proper functionality of sensor
+	   MOVLW	    0x05	        
+	   CALL		    TRIGGER			    ; Start looking again
+	   BRA		    LOOKAGAIN
 	   
 TRIGGER:   MOVWF	    WREG			    ; Prepare WREG for sensor set up
 	   BTFSC	    SMOVCON,	    2		    ; Test for use of R Sensor
@@ -45,7 +46,7 @@ TRIGGER:   MOVWF	    WREG			    ; Prepare WREG for sensor set up
 	   BTFSC	    SMOVCON,	    3		    ; Test for use of L Sensor
 	   BCF		    WREG,	    3		    ; If L sensor only is needed, clear R sensor trigger bit
 	   MOVWF	    PORTB			    ; Set Trigger ~10 us before sense loop begins	   
-	   
+	   RETURN
     
     
 GROUND:	   BTFSC	    SMOVCON,	    2		    ; Test for use of R sensor
@@ -61,5 +62,11 @@ GROUND:	   BTFSC	    SMOVCON,	    2		    ; Test for use of R sensor
 GRDELAY:   DECF	    WREG
 	   BNZ		    GRDELAY
 	   RETURN
-	    
 
+LOOKR:	   
+
+LOOKL:	   
+	   
+	   
+
+	   End
