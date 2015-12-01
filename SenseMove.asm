@@ -25,13 +25,15 @@ SMOVE:	   CALL		    GROUND			    ; Ground echo pins to insure proper functionali
 	   MOVWF	    PORTA			    ; Begin motion		(06 us)
 LOOKAGAIN: CLRF		    TEMPR			    ; Clear R sensor count	(07 us)
 	   CLRF		    TEMPL			    ; Clear L sensor count	(08 us)
+	   MOVLW	    E0				    ; Prepare to copy Distance information from SMOVCON
+	   ANDWF	    SMOVCON
 	   ;MOVLW	    				    ;				(09 us)
 	   MOVWF	    SLOOK			    ;				(10 us)
 	   NOP						    ; Buffer			(11 us)
 	   CLRF		    PORTB			    ; Clear triggers
-LOOK:	   BTFSC	    PORTB,	    RB2		    ; Begin detection loop
-	   INCF		    TEMPR
-	   BTFSC	    PORTB,	    RB1
+LOOK:	   BTFSS	    PORTB,	    RB2		    ; Begin detection loop, as long as L & R sesors are high, there will be no change. 
+	   CALL		    LOOKR
+	   BTFSS	    PORTB,	    RB1
 	   CALL		    LOOKL	   
 	   DECF		    SLOOK
 	   BNZ		    LOOK
@@ -63,7 +65,9 @@ GRDELAY:   DECF	    WREG
 	   BNZ		    GRDELAY
 	   RETURN
 
-LOOKR:	   
+LOOKR:	   BTFSS	    SMOVCON,	    2		    ; If R sensor is not used
+	   RETURN					    ; Return to LOOK loop
+	   
 
 LOOKL:	   
 	   
