@@ -29,9 +29,13 @@ INITIALIZE: MOVLW	    0x60
 	    MOVWF	    TRISB			    ; Set Port B to 0000 1010 (input on RB1 and RB3)
 	    BSF		    PORTB,	    RB5
 	    BSF		    INTCON,	    GIE		    ; Enable global interrupts
-	    BSF		    INTCON,	    PEIE
+	    BSF		    INTCON,	    PEIE	    ; Enable peripherial interrupts
 	    BSF		    INTCON,	    TMR0IE
 	    BCF		    INTCON2,	    TMR0IP	    ; Timer 0 enabled and set to low priority
+	    BCF		    INTCON3,	    INT1IP	    ; Interrupt 1 set to low priority (Left Sensor)
+	    BCF		    INTCON3,	    INT2IP	    ; Interrupt 2 set to low priority (Right Sensor)
+	    BCF		    INTCON2,	    INTEDG1	    ; Interrupt 1 set to falling edge (Left Sensor)
+	    BCF		    INTCON2,	    INTEDG2	    ; Interrupt 2 set to falling edge (Right Sensor)
 	    MOVLW	    0x05
 	    MOVWF	    T0CON			    ; 0000 0011 Set Timer 0 to 16 bit, 1:64 pre-scale, internal clock
 	    SETF	    TMR0L
