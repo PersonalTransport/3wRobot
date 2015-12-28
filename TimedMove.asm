@@ -12,7 +12,7 @@
 #include P18F1220.inc
 #include 3WheelInclude.inc
 
-	    GLOBAL	    TMOVE, DISABLE
+	    GLOBAL	    TMOVE, TDISABLE
 	    
 TMOV:	    code	    0x200
 TMOVE:	    MOVLW	    0xF8
@@ -53,7 +53,7 @@ LRTEST:	    BTFSS	    TMOVCON,	    1		    ; If R Turn = True, skip
 	    BCF		    PORTA,	    RA1		    ; Else, disable L wheel for L turn. 
 	    RETURN
 	    
-DISABLE:    BCF		    INTCON,	    TMR0IF	    ; Remove interrupt flag
+TDISABLE:    BCF		    INTCON,	    TMR0IF	    ; Remove interrupt flag
 	    CLRF	    PORTA			    ; Stop all motion
 	    BCF		    T0CON,	    TMR0ON	    ; Turn off timer
 	    INCF	    TCOUNT			    ; Increment counter for timed motion to allow for stages.   
