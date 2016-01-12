@@ -27,7 +27,7 @@ INITIALIZE: MOVLW	    0x60
 	    CLRF	    TRISA			    ; Set Port A to Output only
 	    MOVLW	    0x09
 	    MOVWF	    TRISB			    ; Set Port B to 0000 1001 (input on RB1 and RB2)
-	    BSF		    PORTB,	    RB5
+	    BSF		    PORTB,	    RB5		    ; Ensure on LED is lit
 	    BSF		    INTCON,	    GIE		    ; Enable global interrupts
 	    BSF		    INTCON,	    PEIE	    ; Enable peripherial interrupts
 	    BSF		    INTCON,	    TMR0IE
