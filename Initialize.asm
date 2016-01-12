@@ -19,19 +19,21 @@
 INITIALIZE: MOVLW	    0x60
 	    IORWF	    OSCCON
 	    CLRF	    TMOVCON
-	    CLRF	    SMOVCON
+	    CLRF	    SENSCON
 	    CLRF	    TCOUNT
 	    CLRF	    SCOUNT
 	    MOVLW	    0x7F
 	    MOVWF	    ADCON1
 	    CLRF	    TRISA			    ; Set Port A to Output only
-	    MOVLW	    0x0A
-	    MOVWF	    TRISB			    ; Set Port B to 0000 1010 (input on RB1 and RB3)
+	    MOVLW	    0x09
+	    MOVWF	    TRISB			    ; Set Port B to 0000 1001 (input on RB1 and RB2)
 	    BSF		    PORTB,	    RB5
 	    BSF		    INTCON,	    GIE		    ; Enable global interrupts
 	    BSF		    INTCON,	    PEIE	    ; Enable peripherial interrupts
 	    BSF		    INTCON,	    TMR0IE
 	    BCF		    INTCON2,	    TMR0IP	    ; Timer 0 enabled and set to low priority (move timer)
+	    BSF		    INTCON3,	    INT1IE	    ; Interrupt 1 Enable (Left Sensor)
+	    BSF		    INTCON3,	    INT2IE	    ; Interrupt 2 Enable (Right Sensor)
 	    BCF		    INTCON3,	    INT1IP	    ; Interrupt 1 set to low priority (Left Sensor)
 	    BCF		    INTCON3,	    INT2IP	    ; Interrupt 2 set to low priority (Right Sensor)
 	    BCF		    INTCON2,	    INTEDG1	    ; Interrupt 1 set to falling edge (Left Sensor)
