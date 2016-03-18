@@ -11,7 +11,7 @@
     config	   OSC= INTIO2
 
 #include p18f1220.inc 
-#include robot.inc
+#include edbot.inc
    
 RobotState equ 0x80
 LastSensL equ 0x81

@@ -3,7 +3,7 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>robot</name>
+            <name>EDbot</name>
             <creation-uuid>0ab3c7d7-3eb5-4f4e-afed-490903528764</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions/>
