@@ -14,8 +14,10 @@
 #include edbot.inc
    
 RobotState equ 0x80
-LastSensL equ 0x81
+PrevSensL equ 0x81
 CurSensL equ 0x82
+PrevSensR equ 0x83
+CurSensR equ 0x84
  
 start   code 0x000 ; Executes after reset
     goto INIT
@@ -58,26 +60,29 @@ INIT:
     bsf PORTB,RB5
     clrf RobotState
     
-    clrf LastSensL
+    clrf PrevSensL
+    clrf PrevSensR
+    
 MainL: movff SensLastL, CurSensL
     movf CurSensL, 0
-    xorwf LastSensL, 0		
-    bz MainL
+    xorwf PrevSensL, 0		
+    bz CheckRight ; left has not changed lets check right
+    bra SensChanged
+
+CheckRight: movff SensLastR, CurSensR
+    movf CurSensR, 0
+    xorwf PrevSensR, 0
+    bz MainL ; neither sensor has changed so continue to loop
+    ; right has changes so continue down to Sens Changed..
+SensChanged:
     
     btfsc RobotState,0 ; we are in forward state unless this is set
     bra Backup
     
-    bsf PORTB,RB5 ; turn on light since we are in forward state ;
+    bsf PORTB,RB5 ; make sure light is on since we are in forward state.
     movlw .2 
-    cpfslt CurSensL ; continue to go forward unless we should backup
-    bra MainL
+    cpfsgt CurSensL ; continue to go forward unless we should backup
     
-    ; if we are here we should backup
-    movlw 0xA4
-    movwf PWMCONL
-    
-    movlw 0xA4
-    movwf PWMCONR
     
     bsf RobotState,0 ; okay backing up after this
     bra MainL
@@ -85,16 +90,10 @@ MainL: movff SensLastL, CurSensL
 Backup:
     bcf PORTB,RB5 ; okay kill the light we are backing up
     
-    movlw .2
+    movlw .7
     cpfsgt CurSensL ; keep backing up untill greater than 6 away
     bra MainL
     
-    ; we are here so both sides say we are good so lets go forward
-    movlw 0xE4
-    movwf PWMCONL
-    
-    movlw 0xE4
-    movwf PWMCONR
     
     bcf RobotState,0
     bra MainL
