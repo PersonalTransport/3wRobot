@@ -3,3 +3,6 @@
 /nbproject/Package*
 /build/default/
 /dist/default/
+/CoreLib.X/nbproject/private/
+/CoreLib.X/build/default/
+/CoreLib.X/dist/default/
