@@ -76,15 +76,15 @@ CheckRight: movff SensLastR, CurSensR
     ; right has changes so continue down to Sens Changed..
 SensChanged:
     
-    btfsc RobotState,0 ; we are in forward state unless this is set
-    bra Backup
+   ; btfsc RobotState,0 ; we are in forward state unless this is set
+   ; bra Backup
     
-    bsf PORTB,RB5 ; make sure light is on since we are in forward state.
-    movlw .2 
-    cpfsgt CurSensL ; continue to go forward unless we should backup
+    bcf PORTB,RB5 ; make sure light is on since we are in forward state.
+    movlw .2
+    cpfsgt CurSensL ; continue to go forward unless we should backup 
+    bsf PORTB,RB5
     
-    
-    bsf RobotState,0 ; okay backing up after this
+  ;  bsf RobotState,0 ; okay backing up after this
     bra MainL
     
 Backup:
