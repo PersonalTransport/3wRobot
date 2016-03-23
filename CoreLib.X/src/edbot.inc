@@ -1,8 +1,9 @@
-extern RobotDoLoop
-extern RobotDoInit
+extern CoreDoLoop
+extern CoreDoInit
 
-PWMCONL equ 0x90    
-PWMCONR equ 0x91
- 
-SensLastL equ 0x97
-SensLastR equ 0x98
+cblock 0x90
+    PWMCONL ;Control register for Left PWM    
+    PWMCONR ;Control register for Right PWM
+    SensLastL ; last read on Left Sensor
+    SensLastR ; Last read on Right sensor
+endc

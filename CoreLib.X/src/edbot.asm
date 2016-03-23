@@ -3,18 +3,24 @@
 global RobotDoLoop
 global RobotDoInit
 
-_SensCount equ 0x88
-_PWMCount equ 0x89
-PWMCONL equ 0x090
-PWMCONR equ 0x091
-PWMCOUNT equ 0x092
-PWMONL equ 0x093
-PWMONR equ 0x094
+cblock 0x90 
+; important that the first of these match the public include
+    PWMCONL ;Control register for Left PWM    
+    PWMCONR ;Control register for Right PWM
+    SensLastL ; last read on Left Sensor
+    SensLastR ; Last read on Right sensor
+; now for private internal variables, anything below here doesn't strictly need
+; to match public order, I will stick to PWM followed by Sens for ease of tracking
+    _PWMCount ; internal count used to determine when to do a pwm calculation
+    _SensCount ; internal count used for determing when to read a sensor
 
-SensStatus equ 0x95
-SensCount  equ 0x96
-SensLastL equ 0x97
-SensLastR equ 0x98
+    PWMCOUNT ; count of the internal PWM cycles, this goes to 50 and resets
+    PWMONL ; count of how many PWM cycles left should be on to reach desired PWM
+    PWMONR ; count of how many PWM cycles right should be on to reach desired PWM
+
+    SensStatus ; internal register used to track the sensor state and last sensor
+    SensCount ; internal count of echo cycles as sensor is being read
+endc
  
 StatusTrig equ 0
 StatusSkip equ 1
