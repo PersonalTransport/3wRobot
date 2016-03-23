@@ -11,7 +11,7 @@
     config	   OSC= INTIO2
 
 #include p18f1220.inc 
-#include edbot.inc
+#include CoreLib.X/src/edbot.inc
    
 RobotState equ 0x80
 PrevSensL equ 0x81

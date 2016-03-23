@@ -145,12 +145,22 @@ SensTrigger:
     bra TriggerLeft
     bra TriggerRight
 
+
+KillSens macro echoBit, SensLast
+    bcf TRISB,echoBit
+    bcf SensPort,echoBit
+    nop ; adding a couple nops to test
+    nop ; this may provide a cleaner kill
+    bsf TRISB,echoBit
+    setf SensLast
+endm
+    
 TriggerLeft:
     ;Check if right sensor is still on
     ;Right Sensor has had it's chance, time to kill it if it isn't allready done
    ; bcf PORTB,RB5 ; for testing
     btfsc SensPort,EchoR ; if this is still high we need to kill it now before we continue
-    call KillRight
+    KillSens EchoR,SensLastR
 
     bsf SensPort,EchoL ; Set input to recieve echo
     bsf SensPort,TrigL ; Set Trigger
@@ -160,13 +170,14 @@ TriggerLeft:
     ; no need to set any bits since 0 is left
     
     bra TriggerDone
- 
+
+    
 TriggerRight:
     ;Check if left sensor is still on
     ;leftt Sensor has had it's chance, time to kill it if it isn't allready done
   ;  bcf PORTB,RB5 ; for testing
     btfsc SensPort,EchoL ; if this is still high we need to kill it now before we continue
-    call KillLeft
+    KillSens EchoL,SensLastL
 
     bsf SensPort,EchoR ; Set input to recieve echo
     bsf SensPort,TrigR ; Set Trigger
@@ -182,28 +193,30 @@ TriggerDone:
     ; up and stop the sensor on the next cycle
     clrf SensCount
     bra RobotLoopDone
-
-KillRight:
-    ;set echo to output and clear
-    bcf TRISB,EchoR
-    bcf SensPort,EchoR
-    nop ; adding a couple nops to test
-    nop ; this maybe helps provide a cleaner kill
-    bsf TRISB,EchoR
-   ; bsf PORTB,RB5 ; for testing
-    setf SensLastR ; this was doing some wierd things, killing it for now, should prolly set an error flag somewhere else.
-    return
     
-KillLeft:
-    ;set echo to output and clear
-    bcf TRISB,EchoL
-    bcf SensPort,EchoL
-    nop ; adding a couple nops to test
-    nop ; this maybe helps provide a cleaner kill
-    bsf TRISB,EchoL
-   ; bsf PORTB,RB5 ;for testing
-    setf SensLastL ; same as above, seeing if this fixes it.
-    return
+
+;    
+;KillRight:
+;    ;set echo to output and clear
+;    bcf TRISB,EchoR
+;    bcf SensPort,EchoR
+;    nop ; adding a couple nops to test
+;    nop ; this maybe helps provide a cleaner kill
+;    bsf TRISB,EchoR
+;   ; bsf PORTB,RB5 ; for testing
+;    setf SensLastR ; this was doing some wierd things, killing it for now, should prolly set an error flag somewhere else.
+;    return
+;    
+;KillLeft:
+;    ;set echo to output and clear
+;    bcf TRISB,EchoL
+;    bcf SensPort,EchoL
+;    nop ; adding a couple nops to test
+;    nop ; this maybe helps provide a cleaner kill
+;    bsf TRISB,EchoL
+;   ; bsf PORTB,RB5 ;for testing
+;    setf SensLastL ; same as above, seeing if this fixes it.
+;    return
 
 SensRead:
     btfss SensStatus,7
