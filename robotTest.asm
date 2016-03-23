@@ -75,18 +75,28 @@ CheckRight: movff SensLastR, CurSensR
     bz MainL ; neither sensor has changed so continue to loop
     ; right has changes so continue down to Sens Changed..
 SensChanged:
-    
+   ; lets check if it is an error state, and if so wait for a new state
+   movlw 0xFF
+   cpfslt CurSensL
+   bra Err ; We have an error state on Left
+   
+   cpfslt CurSensR
+   bra Err ; We have an error state on right
+   
    ; btfsc RobotState,0 ; we are in forward state unless this is set
    ; bra Backup
-    
-    bcf PORTB,RB5 ; make sure light is on since we are in forward state.
-    movlw .2
-    cpfsgt CurSensL ; continue to go forward unless we should backup 
-    bsf PORTB,RB5
+   bcf PORTB,RB5
+   
+  ;  bsf PORTB,RB5 ; make sure light is on since we are in forward state.
+  ;  movlw .2
+  ;  cpfsgt CurSensL ; continue to go forward unless we should backup 
+  ;  bcf PORTB,RB5
     
   ;  bsf RobotState,0 ; okay backing up after this
     bra MainL
-    
+
+Err:
+    bsf PORTB,RB5
 Backup:
     bcf PORTB,RB5 ; okay kill the light we are backing up
     

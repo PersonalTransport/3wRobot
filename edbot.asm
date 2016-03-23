@@ -191,7 +191,7 @@ KillRight:
     nop ; this maybe helps provide a cleaner kill
     bsf TRISB,EchoR
    ; bsf PORTB,RB5 ; for testing
-    ;setf SensLastR ; this was doing some wierd things, killing it for now, should prolly set an error flag somewhere else.
+    setf SensLastR ; this was doing some wierd things, killing it for now, should prolly set an error flag somewhere else.
     return
     
 KillLeft:
@@ -202,7 +202,7 @@ KillLeft:
     nop ; this maybe helps provide a cleaner kill
     bsf TRISB,EchoL
    ; bsf PORTB,RB5 ;for testing
-    ;setf SensLastL ; same as above, seeing if this fixes it.
+    setf SensLastL ; same as above, seeing if this fixes it.
     return
 
 SensRead:
