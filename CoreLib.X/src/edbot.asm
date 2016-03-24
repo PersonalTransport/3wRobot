@@ -111,17 +111,16 @@ RobotLoopDone:
     bcf PIR1, TMR2IF ; Clear Timer 1 Interrupt Flag
     return
 
+; This currently just copies and clears
+SensSave macro destination
+    movff SensCount, destination
+    bcf SensStatus,StatusDone
+endm
+    
 SensPublish:
     btfss SensStatus,7
-    bra PublishL
-    bra PublishR
-PublishL:
-    movff SensCount,SensLastL
-    bcf SensStatus,StatusDone
-    return
-PublishR:
-    movff SensCount,SensLastR
-    bcf SensStatus,StatusDone
+    SensSave SensLastL
+    SensSave SensLastR
     return
     
 SkipCount:
@@ -143,86 +142,40 @@ SensEndTrigger:
     bcf SensStatus,StatusTrig ; turn off trigger state
     bsf SensStatus,StatusSkip ; turn on skip state
     return
+
+_SensKill macro echoBit, SensLast
+    bcf TRISB,echoBit
+    bcf SensPort,echoBit
+    nop ; adding a couple nops to test
+    nop ; this may provide a cleaner kill
+    bsf TRISB,echoBit ; Set input 
+    setf SensLast
+endm
+
+_SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
+    ;Check if old sensor is still on
+    btfsc SensPort,OldEchoBit ; if this is still high we need to kill it now
+    _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
+    
+    bsf TRISB,NewEchoBit ; just to be absolutely sure its at input
+    bsf SensPort,NewTrigBit ; set trigger, this gets turned off at next cycle
+    
+    clrf SensStatus ; set to 0 state so that skip is next.
+    bra TriggerDone
+endm
     
 SensTrigger:
     clrf _SensCount ; esnure we get here again
     ;Determine which is on, if Status is 0 we turn right on, if status is 1 we turn left on
     btfsc SensStatus,7 ; 0 is left 1 is right
-    bra TriggerLeft
-    bra TriggerRight
-
-
-KillSens macro echoBit, SensLast
-    bcf TRISB,echoBit
-    bcf SensPort,echoBit
-    nop ; adding a couple nops to test
-    nop ; this may provide a cleaner kill
-    bsf TRISB,echoBit
-    setf SensLast
-endm
-    
-TriggerLeft:
-    ;Check if right sensor is still on
-    ;Right Sensor has had it's chance, time to kill it if it isn't allready done
-   ; bcf PORTB,RB5 ; for testing
-    btfsc SensPort,EchoR ; if this is still high we need to kill it now before we continue
-    KillSens EchoR,SensLastR
-
-    bsf SensPort,EchoL ; Set input to recieve echo
-    bsf SensPort,TrigL ; Set Trigger
-    
-    ; set status 
-    clrf SensStatus
-    ; no need to set any bits since 0 is left
-    
-    bra TriggerDone
-
-    
-TriggerRight:
-    ;Check if left sensor is still on
-    ;leftt Sensor has had it's chance, time to kill it if it isn't allready done
-  ;  bcf PORTB,RB5 ; for testing
-    btfsc SensPort,EchoL ; if this is still high we need to kill it now before we continue
-    KillSens EchoL,SensLastL
-
-    bsf SensPort,EchoR ; Set input to recieve echo
-    bsf SensPort,TrigR ; Set Trigger
-    
-    ; set status 
-    clrf SensStatus
-    bsf SensStatus,7 ; set this to 1 for right
-    
-    bra TriggerDone
+    _SensTrigger EchoL, TrigL, EchoR, SensLastR ; Trigger Left sensor
+    _SensTrigger EchoR, TrigR, EchoL, SensLastL ; Trigger Right sensor
 
 TriggerDone: 
     bsf SensStatus,StatusTrig ; this set's trigger stop state we need to clean
     ; up and stop the sensor on the next cycle
     clrf SensCount
     bra RobotLoopDone
-    
-
-;    
-;KillRight:
-;    ;set echo to output and clear
-;    bcf TRISB,EchoR
-;    bcf SensPort,EchoR
-;    nop ; adding a couple nops to test
-;    nop ; this maybe helps provide a cleaner kill
-;    bsf TRISB,EchoR
-;   ; bsf PORTB,RB5 ; for testing
-;    setf SensLastR ; this was doing some wierd things, killing it for now, should prolly set an error flag somewhere else.
-;    return
-;    
-;KillLeft:
-;    ;set echo to output and clear
-;    bcf TRISB,EchoL
-;    bcf SensPort,EchoL
-;    nop ; adding a couple nops to test
-;    nop ; this maybe helps provide a cleaner kill
-;    bsf TRISB,EchoL
-;   ; bsf PORTB,RB5 ;for testing
-;    setf SensLastL ; same as above, seeing if this fixes it.
-;    return
 
 SensRead:
     btfss SensStatus,7
