@@ -1,0 +1,680 @@
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  1
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00001 ;------------------------------------------------------------------------------------- 
+                      00002 ; FILE: Initialize.asm
+                      00003 ; DESC: Initialize Call for any car function.
+                      00004 ; DATE: 11-10-15
+                      00005 ; AUTH: Marie Bomber 
+                      00006 ; DEVICE: PICmicro (PIC18F1220) 
+                      00007 ;------------------------------------------------------------------------------------- 
+                      00008             list           p=18F1220                       ; Set processor type 
+                      00009             radix          hex                             ; Sets the default radix for data exp. 
+                      00010             config         WDT=OFF, LVP=OFF                ; Disable Watchdog timer and Low Voltage
+                      00011             config         OSC= INTIO2
+                      00012     
+  0000                00013             GLOBAL          INITIALIZE, DISABLE
+                      00014 
+                      00015 #include P18F1220.inc
+                      00001         LIST
+                      00002 
+                      00003 ;==========================================================================
+                      00004 ; Build date : Apr 06 2015
+                      00005 ;  MPASM PIC18F1220 processor include
+                      00006 ; 
+                      00007 ;  (c) Copyright 1999-2015 Microchip Technology, All rights reserved
+                      00008 ;==========================================================================
+                      00009 
+                      00991         LIST
+                      00016 #include 3WheelInclude.inc
+                      00001 #DEFINE TMOVCON 0x90            ;Configure Register for Timed Move Command
+                      00002 #DEFINE SMOVCON 0x91            ;Configure Register for Sense Move Command
+                      00003 #DEFINE TEMP    0x92            ;Placeholder register for any calls
+                      00004 #DEFINE TCOUNT  0x93            ;Stage counter for Timed move
+                      00005 #DEFINE SCOUNT  0x94            ;Stage counter for Sense commands
+                      00006 
+                      00007 
+                      00017             
+                      00018             code            0x300
+000300 0E60           00019 INITIALIZE: MOVLW           0x60
+000302 12D3           00020             IORWF           OSCCON
+000304 6B90           00021             CLRF            TMOVCON
+000306 6B93           00022             CLRF            TCOUNT
+000308 6B94           00023             CLRF            SCOUNT
+00030A 0E7F           00024             MOVLW           0x7F
+00030C 6EC1           00025             MOVWF           ADCON1
+00030E 6A92           00026             CLRF            TRISA                           ; Set Port A to Output only
+000310 8EF2           00027             BSF             INTCON,         GIE             ; Enable global interrupts
+000312 8CF2           00028             BSF             INTCON,         PEIE
+000314 8AF2           00029             BSF             INTCON,         TMR0IE
+000316 94F1           00030             BCF             INTCON2,        TMR0IP          ; Timer 3 enabled and set to low priority
+000318 0E03           00031             MOVLW           0x03
+00031A 6ED5           00032             MOVWF           T0CON                           ; 0000 0011 Set Timer 0 to 16 bit, 1:16 pre-
+                            scale, internal clock
+00031C 68D6           00033             SETF            TMR0L
+00031E 68D7           00034             SETF            TMR0H                           ; Timer 0 set to 0xFFFF
+000320 0012           00035             RETURN
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  2
+
+
+LOC  OBJECT CODE     LINE SOURCE TEXT
+  VALUE
+
+                      00036 
+                      00037 
+000322 94F2           00038 DISABLE:    BCF             INTCON,         TMR0IF
+000324 6A80           00039             CLRF            PORTA
+000326 9ED5           00040             BCF             T0CON,          TMR0ON
+000328 0010           00041             RETFIE
+                      00042             
+                      00043             End
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  3
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+A                                 00000000
+ABDEN                             00000000
+ACCESS                            00000000
+ACQT0                             00000003
+ACQT1                             00000004
+ACQT2                             00000005
+ADCON0                            00000FC2
+ADCON1                            00000FC1
+ADCON2                            00000FC0
+ADCS0                             00000000
+ADCS1                             00000001
+ADCS2                             00000002
+ADDEN                             00000003
+ADEN                              00000003
+ADFM                              00000007
+ADIE                              00000006
+ADIF                              00000006
+ADIP                              00000006
+ADON                              00000000
+ADRES                             00000FC3
+ADRESH                            00000FC4
+ADRESL                            00000FC3
+AN0                               00000000
+AN1                               00000001
+AN2                               00000002
+AN3                               00000003
+AN4                               00000000
+AN5                               00000001
+AN6                               00000004
+BANKED                            00000001
+BAUDCTL                           00000FAA
+BOR                               00000000
+BRG16                             00000003
+BRGH                              00000002
+BSR                               00000FE0
+C                                 00000000
+CCP1                              00000003
+CCP1CON                           00000FBD
+CCP1IE                            00000002
+CCP1IF                            00000002
+CCP1IP                            00000002
+CCP1M0                            00000000
+CCP1M1                            00000001
+CCP1M2                            00000002
+CCP1M3                            00000003
+CCP1X                             00000005
+CCP1Y                             00000004
+CCPR1                             00000FBE
+CCPR1H                            00000FBF
+CCPR1L                            00000FBE
+CFGS                              00000006
+CHS0                              00000002
+CHS1                              00000003
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  4
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+CHS2                              00000004
+CK                                00000001
+CLKI                              00000007
+CLKIN                             00000007
+CLKO                              00000006
+CLKOUT                            00000006
+CREN                              00000004
+CSRC                              00000007
+DC                                00000001
+DC1B0                             00000004
+DC1B1                             00000005
+DDRA                              TRISA
+DDRB                              TRISB
+DDRC                              TRISC
+DDRD                              TRISD
+DDRE                              TRISE
+DISABLE                           00000322
+DONE                              00000001
+ECCPAS                            00000FB6
+ECCPAS0                           00000004
+ECCPAS1                           00000005
+ECCPAS2                           00000006
+ECCPASE                           00000007
+EEADR                             00000FA9
+EECON1                            00000FA6
+EECON2                            00000FA7
+EEDATA                            00000FA8
+EEIE                              00000004
+EEIF                              00000004
+EEIP                              00000004
+EEPGD                             00000007
+FAST                              00000001
+FERR                              00000002
+FLTS                              00000002
+FREE                              00000004
+FSR0                              00000000
+FSR0H                             00000FEA
+FSR0L                             00000FE9
+FSR1                              00000001
+FSR1H                             00000FE2
+FSR1L                             00000FE1
+FSR2                              00000002
+FSR2H                             00000FDA
+FSR2L                             00000FD9
+GIE                               00000007
+GIEH                              00000007
+GIEL                              00000006
+GIE_GIEH                          00000007
+GO                                00000001
+GO_DONE                           00000001
+GO_NOT_DONE                       00000001
+IDLEN                             00000007
+INDF0                             00000FEF
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  5
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+INDF1                             00000FE7
+INDF2                             00000FDF
+INITIALIZE                        00000300
+INT0                              00000000
+INT0E                             00000004
+INT0F                             00000001
+INT0IE                            00000004
+INT0IF                            00000001
+INT1                              00000001
+INT1E                             00000003
+INT1F                             00000000
+INT1IE                            00000003
+INT1IF                            00000000
+INT1IP                            00000006
+INT1P                             00000006
+INT2                              00000002
+INT2E                             00000004
+INT2F                             00000001
+INT2IE                            00000004
+INT2IF                            00000001
+INT2IP                            00000007
+INT2P                             00000007
+INTCON                            00000FF2
+INTCON2                           00000FF1
+INTCON3                           00000FF0
+INTE                              00000004
+INTEDG0                           00000006
+INTEDG1                           00000005
+INTEDG2                           00000004
+INTF                              00000001
+IOFS                              00000002
+IPEN                              00000007
+IPR1                              00000F9F
+IPR2                              00000FA2
+IRCF0                             00000004
+IRCF1                             00000005
+IRCF2                             00000006
+IRVST                             00000005
+IVRST                             00000005
+KBI0                              00000004
+KBI1                              00000005
+KBI2                              00000006
+KBI3                              00000007
+LATA                              00000F89
+LATA0                             00000000
+LATA1                             00000001
+LATA2                             00000002
+LATA3                             00000003
+LATA4                             00000004
+LATA6                             00000006
+LATA7                             00000007
+LATB                              00000F8A
+LATB0                             00000000
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  6
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+LATB1                             00000001
+LATB2                             00000002
+LATB3                             00000003
+LATB4                             00000004
+LATB5                             00000005
+LATB6                             00000006
+LATB7                             00000007
+LVDCON                            00000FD2
+LVDEN                             00000004
+LVDIE                             00000002
+LVDIF                             00000002
+LVDIN                             00000001
+LVDIP                             00000002
+LVDL0                             00000000
+LVDL1                             00000001
+LVDL2                             00000002
+LVDL3                             00000003
+MCLR                              00000005
+N                                 00000004
+NOT_BOR                           00000000
+NOT_DONE                          00000001
+NOT_MCLR                          00000005
+NOT_PD                            00000002
+NOT_POR                           00000001
+NOT_RBPU                          00000007
+NOT_RI                            00000004
+NOT_T1SYNC                        00000002
+NOT_T3SYNC                        00000002
+NOT_TO                            00000003
+OERR                              00000001
+OSC1                              00000007
+OSC2                              00000006
+OSCCON                            00000FD3
+OSCFIE                            00000007
+OSCFIF                            00000007
+OSCFIP                            00000007
+OSCTUNE                           00000F9B
+OSTS                              00000003
+OV                                00000003
+P1A                               00000003
+P1B                               00000002
+P1C                               00000006
+P1D                               00000007
+P1M0                              00000006
+P1M1                              00000007
+PC                                00000FF9
+PCFG0                             00000000
+PCFG1                             00000001
+PCFG2                             00000002
+PCFG3                             00000003
+PCFG4                             00000004
+PCFG5                             00000005
+PCFG6                             00000006
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  7
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+PCL                               00000FF9
+PCLATH                            00000FFA
+PCLATU                            00000FFB
+PD                                00000002
+PDC0                              00000000
+PDC1                              00000001
+PDC2                              00000002
+PDC3                              00000003
+PDC4                              00000004
+PDC5                              00000005
+PDC6                              00000006
+PEIE                              00000006
+PEIE_GIEL                         00000006
+PGC                               00000006
+PGD                               00000007
+PGM                               00000005
+PIE1                              00000F9D
+PIE2                              00000FA0
+PIR1                              00000F9E
+PIR2                              00000FA1
+PLUSW0                            00000FEB
+PLUSW1                            00000FE3
+PLUSW2                            00000FDB
+POR                               00000001
+PORTA                             00000F80
+PORTB                             00000F81
+POSTDEC0                          00000FED
+POSTDEC1                          00000FE5
+POSTDEC2                          00000FDD
+POSTINC0                          00000FEE
+POSTINC1                          00000FE6
+POSTINC2                          00000FDE
+PR2                               00000FCB
+PREINC0                           00000FEC
+PREINC1                           00000FE4
+PREINC2                           00000FDC
+PROD                              00000FF3
+PRODH                             00000FF4
+PRODL                             00000FF3
+PRSEN                             00000007
+PSA                               00000003
+PSSAC0                            00000002
+PSSAC1                            00000003
+PSSBD0                            00000000
+PSSBD1                            00000001
+PWM1CON                           00000FB7
+RA0                               00000000
+RA1                               00000001
+RA2                               00000002
+RA3                               00000003
+RA4                               00000004
+RA5                               00000005
+RA6                               00000006
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  8
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+RA7                               00000007
+RB0                               00000000
+RB1                               00000001
+RB2                               00000002
+RB3                               00000003
+RB4                               00000004
+RB5                               00000005
+RB6                               00000006
+RB7                               00000007
+RBIE                              00000003
+RBIF                              00000000
+RBIP                              00000000
+RBPU                              00000007
+RCIDL                             00000006
+RCIE                              00000005
+RCIF                              00000005
+RCIP                              00000005
+RCMT                              00000006
+RCON                              00000FD0
+RCREG                             00000FAE
+RCSTA                             00000FAB
+RD                                00000000
+RD16                              00000007
+RI                                00000004
+RX                                00000004
+RX9                               00000006
+RX9D                              00000000
+SCKP                              00000004
+SCOUNT                            0x94
+SCS                               00000000
+SCS0                              00000000
+SCS1                              00000001
+SENDB                             00000003
+SMOVCON                           0x91
+SP0                               00000000
+SP1                               00000001
+SP2                               00000002
+SP3                               00000003
+SP4                               00000004
+SPBRG                             00000FAF
+SPBRGH                            00000FB0
+SPEN                              00000007
+SREN                              00000005
+STATUS                            00000FD8
+STKFUL                            00000007
+STKOVF                            00000007
+STKPTR                            00000FFC
+STKPTR0                           00000000
+STKPTR1                           00000001
+STKPTR2                           00000002
+STKPTR3                           00000003
+STKPTR4                           00000004
+STKUNF                            00000006
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE  9
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+SWDTE                             00000000
+SWDTEN                            00000000
+SYNC                              00000004
+T016BIT                           00000006
+T08BIT                            00000006
+T0CKI                             00000004
+T0CON                             00000FD5
+T0CS                              00000005
+T0IE                              00000005
+T0IF                              00000002
+T0IP                              00000002
+T0PS0                             00000000
+T0PS1                             00000001
+T0PS2                             00000002
+T0SE                              00000004
+T13CKI                            00000006
+T1CKI                             00000006
+T1CKPS0                           00000004
+T1CKPS1                           00000005
+T1CON                             00000FCD
+T1OSCEN                           00000003
+T1OSI                             00000007
+T1OSO                             00000006
+T1RUN                             00000006
+T1SYNC                            00000002
+T2CKPS0                           00000000
+T2CKPS1                           00000001
+T2CON                             00000FCA
+T3CCP1                            00000003
+T3CCP2                            00000006
+T3CKPS0                           00000004
+T3CKPS1                           00000005
+T3CON                             00000FB1
+T3SYNC                            00000002
+TABLAT                            00000FF5
+TBLPTR                            00000FF6
+TBLPTRH                           00000FF7
+TBLPTRL                           00000FF6
+TBLPTRU                           00000FF8
+TCOUNT                            0x93
+TEMP                              0x92
+TMOVCON                           0x90
+TMR0                              00000FD6
+TMR0H                             00000FD7
+TMR0IE                            00000005
+TMR0IF                            00000002
+TMR0IP                            00000002
+TMR0L                             00000FD6
+TMR0ON                            00000007
+TMR1                              00000FCE
+TMR1CS                            00000001
+TMR1H                             00000FCF
+TMR1IE                            00000000
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE 10
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TMR1IF                            00000000
+TMR1IP                            00000000
+TMR1L                             00000FCE
+TMR1ON                            00000000
+TMR2                              00000FCC
+TMR2IE                            00000001
+TMR2IF                            00000001
+TMR2IP                            00000001
+TMR2ON                            00000002
+TMR3                              00000FB2
+TMR3CS                            00000001
+TMR3H                             00000FB3
+TMR3IE                            00000001
+TMR3IF                            00000001
+TMR3IP                            00000001
+TMR3L                             00000FB2
+TMR3ON                            00000000
+TO                                00000003
+TOS                               00000FFD
+TOSH                              00000FFE
+TOSL                              00000FFD
+TOSU                              00000FFF
+TOUTPS0                           00000003
+TOUTPS1                           00000004
+TOUTPS2                           00000005
+TOUTPS3                           00000006
+TRISA                             00000F92
+TRISA0                            00000000
+TRISA1                            00000001
+TRISA2                            00000002
+TRISA3                            00000003
+TRISA4                            00000004
+TRISA6                            00000006
+TRISA7                            00000007
+TRISB                             00000F93
+TRISB0                            00000000
+TRISB1                            00000001
+TRISB2                            00000002
+TRISB3                            00000003
+TRISB4                            00000004
+TRISB5                            00000005
+TRISB6                            00000006
+TRISB7                            00000007
+TRMT                              00000001
+TUN0                              00000000
+TUN1                              00000001
+TUN2                              00000002
+TUN3                              00000003
+TUN4                              00000004
+TUN5                              00000005
+TX                                00000001
+TX9                               00000006
+TX9D                              00000000
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE 11
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+TXEN                              00000005
+TXIE                              00000004
+TXIF                              00000004
+TXIP                              00000004
+TXREG                             00000FAD
+TXSTA                             00000FAC
+VCFG0                             00000006
+VCFG1                             00000007
+VREFM                             00000002
+VREFP                             00000003
+W                                 00000000
+WDTCON                            00000FD1
+WR                                00000001
+WREG                              00000FE8
+WREN                              00000002
+WRERR                             00000003
+WUE                               00000001
+Z                                 00000002
+_BORV_27_2L                       000000FB
+_BORV_42_2L                       000000F7
+_BORV_45_2L                       000000F3
+_BOR_OFF_2L                       000000FD
+_BOR_ON_2L                        000000FF
+_CONFIG1H                         00300001
+_CONFIG2H                         00300003
+_CONFIG2L                         00300002
+_CONFIG3H                         00300005
+_CONFIG4L                         00300006
+_CONFIG5H                         00300009
+_CONFIG5L                         00300008
+_CONFIG6H                         0030000B
+_CONFIG6L                         0030000A
+_CONFIG7H                         0030000D
+_CONFIG7L                         0030000C
+_CP0_OFF_5L                       000000FF
+_CP0_ON_5L                        000000FE
+_CP1_OFF_5L                       000000FF
+_CP1_ON_5L                        000000FD
+_CPB_OFF_5H                       000000FF
+_CPB_ON_5H                        000000BF
+_CPD_OFF_5H                       000000FF
+_CPD_ON_5H                        0000007F
+_DEBUG_OFF_4L                     000000FF
+_DEBUG_ON_4L                      0000007F
+_DEVID1                           003FFFFE
+_DEVID2                           003FFFFF
+_EBTR0_OFF_7L                     000000FF
+_EBTR0_ON_7L                      000000FE
+_EBTR1_OFF_7L                     000000FF
+_EBTR1_ON_7L                      000000FD
+_EBTRB_OFF_7H                     000000FF
+_EBTRB_ON_7H                      000000BF
+_ECIO_OSC_1H                      000000F5
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE 12
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_EC_OSC_1H                        000000F4
+_FSCM_OFF_1H                      000000BF
+_FSCM_ON_1H                       000000FF
+_HSPLL_OSC_1H                     000000F6
+_HS_OSC_1H                        000000F2
+_IDLOC0                           00200000
+_IDLOC1                           00200001
+_IDLOC2                           00200002
+_IDLOC3                           00200003
+_IDLOC4                           00200004
+_IDLOC5                           00200005
+_IDLOC6                           00200006
+_IDLOC7                           00200007
+_IESO_OFF_1H                      0000007F
+_IESO_ON_1H                       000000FF
+_INTIO1_OSC_1H                    000000F9
+_INTIO2_OSC_1H                    000000F8
+_LP_OSC_1H                        000000F0
+_LVP_OFF_4L                       000000FB
+_LVP_ON_4L                        000000FF
+_MCLRE_OFF_3H                     0000007F
+_MCLRE_ON_3H                      000000FF
+_PWRT_OFF_2L                      000000FF
+_PWRT_ON_2L                       000000FE
+_RCIO_OSC_1H                      000000F7
+_RC_OSC_1H                        000000FC
+_STVR_OFF_4L                      000000FE
+_STVR_ON_4L                       000000FF
+_WDTPS_128_2H                     000000EF
+_WDTPS_16K_2H                     000000FD
+_WDTPS_16_2H                      000000E9
+_WDTPS_1K_2H                      000000F5
+_WDTPS_1_2H                       000000E1
+_WDTPS_256_2H                     000000F1
+_WDTPS_2K_2H                      000000F7
+_WDTPS_2_2H                       000000E3
+_WDTPS_32K_2H                     000000FF
+_WDTPS_32_2H                      000000EB
+_WDTPS_4K_2H                      000000F9
+_WDTPS_4_2H                       000000E5
+_WDTPS_512_2H                     000000F3
+_WDTPS_64_2H                      000000ED
+_WDTPS_8K_2H                      000000FB
+_WDTPS_8_2H                       000000E7
+_WDT_OFF_2H                       000000FE
+_WDT_ON_2H                        000000FF
+_WRT0_OFF_6L                      000000FF
+_WRT0_ON_6L                       000000FE
+_WRT1_OFF_6L                      000000FF
+_WRT1_ON_6L                       000000FD
+_WRTB_OFF_6H                      000000FF
+_WRTB_ON_6H                       000000BF
+_WRTC_OFF_6H                      000000FF
+MPASM 5.62                    INITIALIZE.ASM   11-13-2015  11:38:36         PAGE 13
+
+
+SYMBOL TABLE
+  LABEL                             VALUE 
+
+_WRTC_ON_6H                       000000DF
+_WRTD_OFF_6H                      000000FF
+_WRTD_ON_6H                       0000007F
+_XT_OSC_1H                        000000F1
+__18F1220                         00000001
+
+Errors   :     0
+Warnings :     0 reported,     0 suppressed
+Messages :     0 reported,     0 suppressed
+
+
