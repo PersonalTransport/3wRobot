@@ -32,7 +32,7 @@ HPRIO:
    
     retfie ; Return from interrupt
 
-RobotL: call RobotDoLoop ; PWM_LOOP is responsible to clear the flag.
+RobotL: call CoreDoLoop ; PWM_LOOP is responsible to clear the flag.
     bra HPRIO	; return to HPRIO in case other interrupts need to be processed.
 
     
@@ -47,7 +47,7 @@ INIT:
     bsf INTCON, PEIE ; enable all interrupts
     
     ;Do pwm init code.
-    call RobotDoInit
+    call CoreDoInit
     
     ; Set to zero for start
     movlw 0x00

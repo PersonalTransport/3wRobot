@@ -1,7 +1,7 @@
 #include p18f1220.inc 
     
-global RobotDoLoop
-global RobotDoInit
+global CoreDoLoop
+global CoreDoInit
 
 cblock 0x90 
 ; important that the first of these match the public include
@@ -42,7 +42,7 @@ PWMLCE	equ RA3
 		
 pwm code 0x400
   
-RobotDoInit:
+CoreDoInit:
 	    
     ; Clear PWM Variables
     clrf PWMCONL
@@ -82,7 +82,7 @@ RobotDoInit:
     bsf T2CON,TMR2ON
     return 
  
-RobotDoLoop:
+CoreDoLoop:
     incf _PWMCount
     movlw .4
     cpfslt _PWMCount
@@ -111,17 +111,21 @@ RobotLoopDone:
     bcf PIR1, TMR2IF ; Clear Timer 1 Interrupt Flag
     return
 
-; This currently just copies and clears
-SensSave macro destination
+; This currently just copies and clears and returns, but I don't have to type it twice
+_SensSave macro destination
     movff SensCount, destination
     bcf SensStatus,StatusDone
-endm
-    
-SensPublish:
-    btfss SensStatus,7
-    SensSave SensLastL
-    SensSave SensLastR
     return
+endm
+
+; what im doing here may look wierd, but I am testing how macro's get called
+; the results of this is less code repetition, but I have to use two branches to acheive 
+SensPublish: ; 
+    btfss SensStatus,7
+    bra SensSaveL
+    bra SensSaveR
+SensSaveL: _SensSave SensLastL
+SensSaveR: _SensSave SensLastR
     
 SkipCount:
     btfss SensStatus,StatusCount
@@ -153,21 +157,32 @@ _SensKill macro echoBit, SensLast
 endm
 
 _SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
+    ; we should skip to the end if this is set, this is a bit wierd but it works
+    btfss SensStatus,7
+    bra local _SensTrigger_skip  
+    
     ;Check if old sensor is still on
     btfsc SensPort,OldEchoBit ; if this is still high we need to kill it now
-    _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
+    bra local _SensTrigger_kill
     
+local _SensTrigger_continue:
     bsf TRISB,NewEchoBit ; just to be absolutely sure its at input
     bsf SensPort,NewTrigBit ; set trigger, this gets turned off at next cycle
     
     clrf SensStatus ; set to 0 state so that skip is next.
     bra TriggerDone
+    
+local _SensTrigger_kill:
+    _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
+    bra local _SensTrigger_continue
+local _SensTrigger_skip:
 endm
     
 SensTrigger:
     clrf _SensCount ; esnure we get here again
     ;Determine which is on, if Status is 0 we turn right on, if status is 1 we turn left on
-    btfsc SensStatus,7 ; 0 is left 1 is right
+    ; this is now done inside the macro as it simplifies the code, this must be called in this order
+    ; for things to properly unfold
     _SensTrigger EchoL, TrigL, EchoR, SensLastR ; Trigger Left sensor
     _SensTrigger EchoR, TrigR, EchoL, SensLastL ; Trigger Right sensor
 
