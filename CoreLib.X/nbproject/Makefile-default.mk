@@ -45,17 +45,17 @@ OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 DISTDIR=dist/${CND_CONF}/${IMAGE_TYPE}
 
 # Source Files Quoted if spaced
-SOURCEFILES_QUOTED_IF_SPACED=src/edbot.asm
+SOURCEFILES_QUOTED_IF_SPACED=edbot.asm
 
 # Object Files Quoted if spaced
-OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/src/edbot.o
-POSSIBLE_DEPFILES=${OBJECTDIR}/src/edbot.o.d
+OBJECTFILES_QUOTED_IF_SPACED=${OBJECTDIR}/edbot.o
+POSSIBLE_DEPFILES=${OBJECTDIR}/edbot.o.d
 
 # Object Files
-OBJECTFILES=${OBJECTDIR}/src/edbot.o
+OBJECTFILES=${OBJECTDIR}/edbot.o
 
 # Source Files
-SOURCEFILES=src/edbot.asm
+SOURCEFILES=edbot.asm
 
 
 CFLAGS=
@@ -82,22 +82,22 @@ MP_LINKER_DEBUG_OPTION=
 # ------------------------------------------------------------------------------------
 # Rules for buildStep: assemble
 ifeq ($(TYPE_IMAGE), DEBUG_RUN)
-${OBJECTDIR}/src/edbot.o: src/edbot.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/edbot.o.d 
-	@${RM} ${OBJECTDIR}/src/edbot.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/src/edbot.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/src/edbot.lst\\\" -e\\\"${OBJECTDIR}/src/edbot.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/src/edbot.o\\\" \\\"src/edbot.asm\\\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/src/edbot.o"
-	@${FIXDEPS} "${OBJECTDIR}/src/edbot.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+${OBJECTDIR}/edbot.o: edbot.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/edbot.o.d 
+	@${RM} ${OBJECTDIR}/edbot.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/edbot.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/edbot.lst\\\" -e\\\"${OBJECTDIR}/edbot.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/edbot.o\\\" \\\"edbot.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/edbot.o"
+	@${FIXDEPS} "${OBJECTDIR}/edbot.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 else
-${OBJECTDIR}/src/edbot.o: src/edbot.asm  nbproject/Makefile-${CND_CONF}.mk
-	@${MKDIR} "${OBJECTDIR}/src" 
-	@${RM} ${OBJECTDIR}/src/edbot.o.d 
-	@${RM} ${OBJECTDIR}/src/edbot.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/src/edbot.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/src/edbot.lst\\\" -e\\\"${OBJECTDIR}/src/edbot.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/src/edbot.o\\\" \\\"src/edbot.asm\\\" 
-	@${DEP_GEN} -d "${OBJECTDIR}/src/edbot.o"
-	@${FIXDEPS} "${OBJECTDIR}/src/edbot.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
+${OBJECTDIR}/edbot.o: edbot.asm  nbproject/Makefile-${CND_CONF}.mk
+	@${MKDIR} "${OBJECTDIR}" 
+	@${RM} ${OBJECTDIR}/edbot.o.d 
+	@${RM} ${OBJECTDIR}/edbot.o 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/edbot.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/edbot.lst\\\" -e\\\"${OBJECTDIR}/edbot.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/edbot.o\\\" \\\"edbot.asm\\\" 
+	@${DEP_GEN} -d "${OBJECTDIR}/edbot.o"
+	@${FIXDEPS} "${OBJECTDIR}/edbot.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
 endif
 
