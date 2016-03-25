@@ -4,8 +4,8 @@
 /build/default/
 /disassembly
 /dist/default/
-/CoreLib.X/nbproject/private/
 /CoreLib.X/nbproject/Make*
+/CoreLib.X/nbproject/private/
 /CoreLib.X/nbproject/Package*
 /CoreLib.X/build/default/
 /CoreLib.X/dist/default/

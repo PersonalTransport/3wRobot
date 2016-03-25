@@ -1,5 +1,5 @@
 #include p18f1220.inc 
-    
+
 global CoreDoLoop
 global CoreDoInit
 
