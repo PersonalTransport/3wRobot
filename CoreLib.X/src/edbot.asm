@@ -157,25 +157,26 @@ _SensKill macro echoBit, SensLast
 endm
 
 _SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
+    local continue,kill,skip
     ; we should skip to the end if this is set, this is a bit wierd but it works
     btfss SensStatus,7
-    bra local _SensTrigger_skip  
+    bra skip  
     
     ;Check if old sensor is still on
     btfsc SensPort,OldEchoBit ; if this is still high we need to kill it now
-    bra local _SensTrigger_kill
+    bra kill
     
-local _SensTrigger_continue:
+continue:
     bsf TRISB,NewEchoBit ; just to be absolutely sure its at input
     bsf SensPort,NewTrigBit ; set trigger, this gets turned off at next cycle
     
     clrf SensStatus ; set to 0 state so that skip is next.
     bra TriggerDone
     
-local _SensTrigger_kill:
+kill:
     _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
-    bra local _SensTrigger_continue
-local _SensTrigger_skip:
+    bra continue
+skip:
 endm
     
 SensTrigger:
