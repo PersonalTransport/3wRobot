@@ -9,7 +9,7 @@
 	    radix	   hex				   ; Sets the default radix for data exp. 
 
 	    
-#include P18F1220.inc
+#include p18f1220.inc
 #include 3WheelInclude.inc
 
 	    GLOBAL	    TMOVE, TDISABLE

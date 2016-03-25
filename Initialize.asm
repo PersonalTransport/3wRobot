@@ -12,7 +12,7 @@
     
 	    GLOBAL	    INITIALIZE
 
-#include P18F1220.inc
+#include p18f1220.inc
 #include 3WheelInclude.inc
 	    
 	    code	    0x300

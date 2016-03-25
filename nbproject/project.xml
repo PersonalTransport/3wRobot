@@ -3,8 +3,8 @@
     <type>com.microchip.mplab.nbide.embedded.makeproject</type>
     <configuration>
         <data xmlns="http://www.netbeans.org/ns/make-project/1">
-            <name>3WheelCar</name>
-            <creation-uuid>0a422831-eaab-4db2-a0d9-68118afe8cc9</creation-uuid>
+            <name>EDbot</name>
+            <creation-uuid>0ab3c7d7-3eb5-4f4e-afed-490903528764</creation-uuid>
             <make-project-type>0</make-project-type>
             <c-extensions/>
             <cpp-extensions/>
