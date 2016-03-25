@@ -1,21 +1,0 @@
-MPASM 5.62                        SENSOR.ASM   11-13-2015  11:38:36         PAGE  1
-
-
-LOC  OBJECT CODE     LINE SOURCE TEXT
-  VALUE
-
-Warning[205]: Found directive in column 1. (End)
-                      00001 End
-MPASM 5.62                        SENSOR.ASM   11-13-2015  11:38:36         PAGE  2
-
-
-SYMBOL TABLE
-  LABEL                             VALUE 
-
-__18F1220                         00000001
-
-Errors   :     0
-Warnings :     1 reported,     0 suppressed
-Messages :     0 reported,     0 suppressed
-
-
