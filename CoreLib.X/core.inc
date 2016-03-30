@@ -11,7 +11,8 @@ cblock MemoryStart
     SensLastL ; last read on Left Sensor
     SensLastR ; Last read on Right sensor
 endc
-
+;Increment memory start, if you add more variables avove
+;YOU MUST UPDATE THIS!!!!!
 MemoryStart += 4
 
 ; Please do not define __CORE_SKIP_PUBLIC unless you are extending

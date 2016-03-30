@@ -15,8 +15,7 @@ cblock MemoryStart
 ;    SensLastR ; Last read on Right sensor
 ; now for private internal variables, anything below here doesn't strictly need
 ; to match public order, I will stick to PWM followed by Sens for ease of tracking
-    _PWMCount ; internal count used to determine when to do a pwm calculation
-    _SensCount ; internal count used for determing when to read a sensor
+
 
     PWMCOUNT ; count of the internal PWM cycles, this goes to 50 and resets
     PWMONL ; count of how many PWM cycles left should be on to reach desired PWM
