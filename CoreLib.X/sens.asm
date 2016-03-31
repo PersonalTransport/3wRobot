@@ -1,14 +1,45 @@
 #include p18f1220.inc
-#include _core.inc
 #include _sens.inc
 
+    global SensSetup, SensUpdate
+
+.Sens code
+
+SensSetup:
+    clrf SensCount
+    clrf SensLastL
+    clrf SensLastR
+    clrf SensStatus
+    
+    movlw 0x0A
+    movwf TRISB ; setup inputs and outputs for PORT B for Sensor Triggering
+    clrf PORTB;
+    bcf PORTB,RB5
+    
+    return
+
+SensUpdate:
+    btfsc SensStatus,StatusTrig ; if trigger is set then we need to stop it
+    call SensEndTrigger
+    
+    btfsc SensStatus,StatusSkip ; skip this cycle to give it a chance to display
+    bra SkipCount
+    
+    btfsc SensStatus,StatusCount ; we should either be counting or waiting here, about to see
+    call SensRead
+    
+    btfsc SensStatus,StatusDone ; we should now publish to the proper register
+    call SensPublish
+    
+    return
 
 ; This currently just copies and clears and returns, but I don't have to type it twice
 _SensSave macro destination
     movff SensCount, destination
     bcf SensStatus,StatusDone
     return
-endm
+    
+    endm
 
 ; what im doing here may look wierd, but I am testing how macro's get called
 ; the results of this is less code repetition, but I have to use two branches to acheive 
@@ -26,11 +57,11 @@ SkipCount:
     bcf SensStatus,StatusTrig
     bcf SensStatus,StatusSkip
     bsf SensStatus,StatusCount
-    bra RobotLoopDone
+    return
     
 SkipAgain:
     bsf SensStatus,StatusCount
-    bra RobotLoopDone
+    return
     
 SensEndTrigger:
     bcf SensPort,TrigL
@@ -46,7 +77,7 @@ _SensKill macro echoBit, SensLast
     nop ; this may provide a cleaner kill
     bsf TRISB,echoBit ; Set input 
     setf SensLast
-endm
+    endm
 
 _SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
     local continue,kill,skip
@@ -69,7 +100,7 @@ kill:
     _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
     bra continue
 skip:
-endm
+    endm
     
 SensTrigger:
     clrf _SensCount ; esnure we get here again
@@ -83,7 +114,7 @@ TriggerDone:
     bsf SensStatus,StatusTrig ; this set's trigger stop state we need to clean
     ; up and stop the sensor on the next cycle
     clrf SensCount
-    bra RobotLoopDone
+    return
 
 SensRead:
     btfss SensStatus,7
@@ -111,3 +142,6 @@ clearTrigger:
     
 SensDone:    
     return
+    
+    
+    end

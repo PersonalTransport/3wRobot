@@ -1,12 +1,32 @@
 #include p18f1220.inc
-#include _core.inc
 #include _pwm.inc
 
-global PWMInit, PWMUpdate
+    global PwmSetup, PwmLoop
 
 .PWM code
-
-PWMInit:
+ 
+PwmSetup:
+    ; Clear PWM Variables
+    clrf PWMCONL
+    clrf PWMCONR
+    clrf PWMCOUNT
+    clrf PWMONL
+    clrf PWMONR
+    
+    movlw 0x00	
+    movwf TRISA ; set PortA To output.
+    clrf PORTA ; Clear port a to make sure that the motors start stopped.
+    
+    return
+    
+PwmLoop:
+    clrf _PWMCount ; ensure we get here again
+    tstfsz  PWMCOUNT
+    call PwmUpdate
+    call PwmInit
+    return
+    
+PwmInit:
     ; do init 
     movlw   0x32
     movwf   PWMCOUNT
@@ -33,7 +53,7 @@ PWMInit:
     
     BRA	    PWMDONE
     
-PWMUpdate:
+PwmUpdate:
     ; update Left motor
     BTFSS PWMCONL,7
     BRA PWMLeftNop
@@ -85,4 +105,4 @@ PWMRightDone:
 PWMDONE:
     return
 
-end
+    end
