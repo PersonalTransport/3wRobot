@@ -6,9 +6,9 @@
     ;things we need from pwm.asm
     extern PwmSetup, PwmLoop
     ;things we need from sens.asm
-    extern SensSetup,SensTrigger
+    extern SensSetup,SensUpdate,SensTrigger
 		
-.Core code
+.CORE code
   
 CoreDoInit:
 	    
@@ -44,7 +44,11 @@ CoreDoLoop:
     cpfslt _SensCount
     bra DoTrigger
     
- 
+    ; if we are here it means we didn't trigger, so we should call update
+    call SensUpdate
+    
+    bra RobotLoopDone
+    
 DoTrigger: ; this is to ensure we don't trigger and read on the same cycle
     call SensTrigger
     ;bra RobotLoopDone

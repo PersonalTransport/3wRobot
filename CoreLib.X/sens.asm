@@ -1,9 +1,9 @@
 #include p18f1220.inc
 #include _sens.inc
 
-    global SensSetup, SensUpdate
+    global SensSetup, SensUpdate, SensTrigger
 
-.Sens code
+.SENSE code
 
 SensSetup:
     clrf SensCount

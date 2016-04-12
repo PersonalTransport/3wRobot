@@ -22,8 +22,8 @@ PwmSetup:
 PwmLoop:
     clrf _PWMCount ; ensure we get here again
     tstfsz  PWMCOUNT
-    call PwmUpdate
-    call PwmInit
+    bra PwmUpdate
+    bra PwmInit
     return
     
 PwmInit:
@@ -98,8 +98,8 @@ PWMDecR: DECF PWMONR,1
 PWMTurnROn: BSF PWMPORT,PWMRCE
 PWMRightDone:   
 
-    MOVLW 0x16	; 156 should be 100 cycles
-    MOVWF TMR2
+   ; MOVLW 0x16	; 156 should be 100 cycles
+   ; MOVWF TMR2
     
     decf PWMCOUNT,1
 PWMDONE:

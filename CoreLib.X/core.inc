@@ -1,16 +1,23 @@
 #ifndef __EDBOT_INC__
 #define __EDBOT_INC__
 
+; you can redefine this to wherever you feel like, 90 is default for now
+; this lets a user who needs more than 0x10 addresses get more by pushing back 
+; our memory.
+#ifndef MEM_START
+#define MEM_START 0x90
+#endif
 ; this defines the start of the library's memory bank, this can be shifted around
 ; do not assume you can access any memory past this as the sub modules will use it
-    variable MemoryStart = 0x90
-
+    variable MemoryStart = MEM_START
+    
     cblock MemoryStart
 	PWMCONL ;Control register for Left PWM    
 	PWMCONR ;Control register for Right PWM
 	SensLastL ; last read on Left Sensor
 	SensLastR ; Last read on Right sensor
     endc
+    
 ;Increment memory start, if you add more variables avove
 ;YOU MUST UPDATE THIS!!!!!
 MemoryStart += 4
