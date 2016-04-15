@@ -3,4 +3,5 @@ nbproject/* linguist-vendored=true
 Makefile  linguist-vendored=true
 CoreLib.X/Makefile  linguist-vendored=true
 CoreLib.X/nbproject/* linguist-vendored=true
-
+*Makefile linguist-vendored=true
+*nbproject/* linguist-vendored=true
