@@ -11,7 +11,7 @@
     config	   OSC= INTIO2
 
 #include p18f1220.inc 
-#include CoreLib.X/edbot.inc
+#include CoreLib.X/core.inc
    
 RobotState equ 0x80
 PrevSensL equ 0x81
@@ -19,13 +19,13 @@ CurSensL equ 0x82
 PrevSensR equ 0x83
 CurSensR equ 0x84
  
-start   code 0x000 ; Executes after reset
+ORG.   code 0x000 ; Executes after reset
     goto INIT
     
-high    code 0x008 ; Executes after high priority interrupt
+HIGH.    code 0x008 ; Executes after high priority interrupt
     goto HPRIO
     
-main    code 0x020
+MAIN.    code 0x020
 HPRIO:
     btfsc PIR1, TMR2IF ; high priority loop
     bra RobotL
@@ -33,6 +33,7 @@ HPRIO:
     retfie ; Return from interrupt
 
 RobotL: call CoreDoLoop ; PWM_LOOP is responsible to clear the flag.
+    ;why not clear here
     bra HPRIO	; return to HPRIO in case other interrupts need to be processed.
 
     
@@ -50,10 +51,10 @@ INIT:
     call CoreDoInit
     
     ; Set to zero for start
-    movlw 0x00
+    movlw 0xEF
     movwf PWMCONL
     
-    movlw 0x00
+    movlw 0xE1
     movwf PWMCONR
     
     bcf TRISB,RB5
