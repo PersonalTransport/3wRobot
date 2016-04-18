@@ -16,7 +16,7 @@
 #define  	ADCON1	0xFC1
 	
 .org   code 	0x000	; Set the program origin (start) to absolute 0x000
-    ; Initialize all I/O ports
+    ; Initialize all I/O ports 
     CLRF  	PORTA 	; Initialize PORTA
     CLRF  	PORTB 	; Initialize PORTB
     MOVLW  	0x7F 	; Set all A\D Converter Pins as
@@ -31,7 +31,7 @@
     ; start by going forward for first delay cycle
 Main:
     BCF	    PORTB,5	    ; Set LED to off
-    BSF	    PORTA,1	    ; Enable right motor
+    BSF	    PORTA,1	    ; Enable right motor 
     BSF	    PORTA,0	    ; Forward right
     BSF	    PORTA,3	    ; Enable left motor
     BCF	    PORTA,2	    ; Backward right
