@@ -10,14 +10,26 @@
 ; this defines the start of the library's memory bank, this can be shifted around
 ; do not assume you can access any memory past this as the sub modules will use it
     variable MemoryStart = MEM_START
-    
-    cblock MemoryStart
-	PWMCONL ;Control register for Left PWM    
-	PWMCONR ;Control register for Right PWM
-	SensLastL ; last read on Left Sensor
-	SensLastR ; Last read on Right sensor
-    endc
-    
+
+.coreData    udata_ovr MemoryStart
+PWMCONL res 1 ;Control register for Left PWM 
+
+ 
+PWMCONR res 1 ;Control register for Right PWM
+
+ 
+SensLastL res 1 ; last read on Left Sensor
+SensLastR res 1 ; Last read on Right sensor
+
+    NOLIST
+;----- PWMCONL Bits -----------------------------------------------------
+PWMDIR equ 0x06
+PWMON equ 0x07
+;----- PWMCONL Bits -----------------------------------------------------
+PWMDIR equ 0x06
+PWMON equ 0x07
+    LIST
+ 
 ;Increment memory start, if you add more variables avove
 ;YOU MUST UPDATE THIS!!!!!
 MemoryStart += 4

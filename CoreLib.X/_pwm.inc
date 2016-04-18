@@ -8,12 +8,12 @@
 #include _core.inc
 
 ; okay now we can define our internal pwm variables
-    cblock PwmMemoryStart
-        PWMCOUNT ; count of the internal PWM cycles, this goes to 50 and resets
-        PWMONL ; count of how many PWM cycles left should be on to reach desired PWM
-        PWMONR ; count of how many PWM cycles right should be on to reach desired PWM
-    endc
+.pwmData udata PwmMemoryStart
+PWMCOUNT res 1 ; count of the internal PWM cycles, this goes to 50 and resets
+PWMONL res 1 ; count of how many PWM cycles left should be on to reach desired PWM
+PWMONR res 1 ; count of how many PWM cycles right should be on to reach desired PWM
 
+ 
 ;Port settings for PWM
 PWMPORT	equ PORTA
 PWMRIN	equ RA0

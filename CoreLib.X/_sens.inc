@@ -8,10 +8,11 @@
 #include _core.inc
 
 ; okay now we can define our internal sens variables
-    cblock SensMemoryStart
-	SensStatus ; internal register used to track the sensor state and last sensor
-	SensCount ; internal count of echo cycles as sensor is being read
-    endc
+.sensData  udata SensMemoryStart
+    ;cblock SensMemoryStart
+SensStatus res 1 ; internal register used to track the sensor state and last sensor
+SensCount res 1 ; internal count of echo cycles as sensor is being read
+    ;endc
 
 ; These define which bit of SensStatus does what.
 ; I realize this could have been done with a count up and down, but

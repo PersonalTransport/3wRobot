@@ -8,10 +8,10 @@
 #include core.inc
 
     ; here we define the things needed everywhere in internal.
-    cblock MemoryStart
-        _PWMCount  ;used to track how often a pwm cycle should run
-        _SensCount ;used to track when the sensors should trigger
-    endc
+._coreData udata_ovr MemoryStart
+_PWMCount res 1  ;used to track how often a pwm cycle should run
+_SensCount res 1 ;used to track when the sensors should trigger
+;    endc
     ;Increment memory start, if you add more variables above;
     ;YOU MUST UPDATE THIS to represent that count
 MemoryStart +=2 
