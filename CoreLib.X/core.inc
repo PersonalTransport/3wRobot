@@ -13,23 +13,10 @@
 
 .coreData    udata_ovr MemoryStart
 PWMCONL res 1 ;Control register for Left PWM 
-
- 
 PWMCONR res 1 ;Control register for Right PWM
-
- 
 SensLastL res 1 ; last read on Left Sensor
 SensLastR res 1 ; Last read on Right sensor
 
-    NOLIST
-;----- PWMCONL Bits -----------------------------------------------------
-PWMDIR equ 0x06
-PWMON equ 0x07
-;----- PWMCONL Bits -----------------------------------------------------
-PWMDIR equ 0x06
-PWMON equ 0x07
-    LIST
- 
 ;Increment memory start, if you add more variables avove
 ;YOU MUST UPDATE THIS!!!!!
 MemoryStart += 4

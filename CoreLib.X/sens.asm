@@ -20,16 +20,16 @@ SensSetup:
 
 SensUpdate:
     btfsc SensStatus,StatusTrig ; if trigger is set then we need to stop it
-    call SensEndTrigger
+    bra SensEndTrigger
     
     btfsc SensStatus,StatusSkip ; skip this cycle to give it a chance to display
     bra SkipCount
     
     btfsc SensStatus,StatusCount ; we should either be counting or waiting here, about to see
-    call SensRead
+    bra SensRead
     
     btfsc SensStatus,StatusDone ; we should now publish to the proper register
-    call SensPublish
+    bra SensPublish
     
     return
 
