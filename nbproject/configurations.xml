@@ -28,7 +28,7 @@
         <targetDevice>PIC18F1220</targetDevice>
         <targetHeader></targetHeader>
         <targetPluginBoard></targetPluginBoard>
-        <platformTool>Simulator</platformTool>
+        <platformTool>PICkit3PlatformTool</platformTool>
         <languageToolchain>MPASMWIN</languageToolchain>
         <languageToolchainVersion>5.65</languageToolchainVersion>
         <platform>2</platform>

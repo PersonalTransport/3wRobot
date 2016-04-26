@@ -12,7 +12,8 @@
 
 #include p18f1220.inc 
 #include CoreLib.X/core.inc
-   
+
+.roboData udata 
 RobotState equ 0x80
 PrevSensL equ 0x81
 CurSensL equ 0x82
@@ -51,10 +52,10 @@ INIT:
     call CoreDoInit
     
     ; Set to zero for start
-    movlw 0xEF
+    movlw 0x00
     movwf PWMCONL
     
-    movlw 0xE1
+    movlw 0x00
     movwf PWMCONR
     
     bcf TRISB,RB5
@@ -63,52 +64,52 @@ INIT:
     
     clrf PrevSensL
     clrf PrevSensR
-    
-MainL: movff SensLastL, CurSensL
-    movf CurSensL, 0
-    xorwf PrevSensL, 0		
-    bz CheckRight ; left has not changed lets check right
-    bra SensChanged
+   
 
-CheckRight: movff SensLastR, CurSensR
-    movf CurSensR, 0
-    xorwf PrevSensR, 0
-    bz MainL ; neither sensor has changed so continue to loop
-    ; right has changes so continue down to Sens Changed..
-SensChanged:
-   ; lets check if it is an error state, and if so wait for a new state
-   movlw 0xFF
-   cpfslt CurSensL
-   bra Err ; We have an error state on Left
-   
-   cpfslt CurSensR
-   bra Err ; We have an error state on right
-   
-   ; btfsc RobotState,0 ; we are in forward state unless this is set
-   ; bra Backup
-   bcf PORTB,RB5
-   
-  ;  bsf PORTB,RB5 ; make sure light is on since we are in forward state.
-  ;  movlw .2
-  ;  cpfsgt CurSensL ; continue to go forward unless we should backup 
-  ;  bcf PORTB,RB5
+Start:
+    movlw 0xFF
+    movwf PWMCONL
     
-  ;  bsf RobotState,0 ; okay backing up after this
-    bra MainL
-
-Err:
+    movlw 0xBF
+    movwf PWMCONR
+    
+    call Delay
+    
+    movlw 0xBF
+    movwf PWMCONL
+    
+    movlw 0xFF
+    movwf PWMCONR
+    
+    call Delay
+    
+    movlw 0x00
+    movwf PWMCONL
+    
+    movlw 0x00
+    movwf PWMCONR
+MainL: 
+   
+    bcf PORTB,RB5
+    movlw .2
+    cpfsgt SensLastL ; continue to go forward unless we should backup 
     bsf PORTB,RB5
-Backup:
-    bcf PORTB,RB5 ; okay kill the light we are backing up
     
-    movlw .7
-    cpfsgt CurSensL ; keep backing up untill greater than 6 away
+    ;bsf PORTB,RB5 ; make sure light is on since we are in forward state.
     bra MainL
-    
-    
-    bcf RobotState,0
-    bra MainL
-    
+
+  
+Delay: MOVLW .200		    ;Loop 5 times for .5 seconds
+    MOVWF 0x81
+DelayLoop:CALL DelayOnce
+    DECF    0x81
+    BNZ DelayLoop
+    RETURN
+DelayOnce:  CLRF 0x80	;.1 second delay loop
+DelayOnceLoop:  NOP	; delay
+    INCF    0x80	;increment counter
+    BNZ	DelayOnceLoop
+    RETURN
     end
 
 

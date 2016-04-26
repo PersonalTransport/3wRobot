@@ -79,11 +79,27 @@ _SensKill macro echoBit, SensLast
     setf SensLast
     endm
 
+_SensTriggerRight macro
+    local skip
+    btfsc SensStatus,7
+    bra skip
+    _SensTrigger EchoL, TrigL, EchoR, SensLastR
+    bsf SensStatus,7
+    skip:
+    endm
+
+
+_SensTriggerLeft macro
+    local skip
+    btfsc SensStatus,7
+    bra skip
+    _SensTrigger EchoR, TrigR, EchoL, SensLastL
+    bcf SensStatus,7
+    skip:
+    endm
+
 _SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
     local continue,kill,skip
-    ; we should skip to the end if this is set, this is a bit wierd but it works
-    btfss SensStatus,7
-    bra skip  
     
     ;Check if old sensor is still on
     btfsc SensPort,OldEchoBit ; if this is still high we need to kill it now
@@ -93,23 +109,34 @@ continue:
     bsf TRISB,NewEchoBit ; just to be absolutely sure its at input
     bsf SensPort,NewTrigBit ; set trigger, this gets turned off at next cycle
     
-    clrf SensStatus ; set to 0 state so that skip is next.
+    movlw 0x80
+    andwf SensStatus
     bra TriggerDone
     
 kill:
     _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
     bra continue
-skip:
     endm
     
 SensTrigger:
     clrf _SensCount ; esnure we get here again
-    ;Determine which is on, if Status is 0 we turn right on, if status is 1 we turn left on
-    ; this is now done inside the macro as it simplifies the code, this must be called in this order
-    ; for things to properly unfold
-    _SensTrigger EchoL, TrigL, EchoR, SensLastR ; Trigger Left sensor
-    _SensTrigger EchoR, TrigR, EchoL, SensLastL ; Trigger Right sensor
-
+    btfsc SensStatus,7
+    bra skipR
+    bsf SensStatus,7; set this first to make sure we do left Next
+    _SensTrigger EchoR, TrigR, EchoL, SensLastL
+    
+skipR:
+    
+    local skipL
+    btfss SensStatus,7
+    bra skipL
+    bcf SensStatus,7; set this first to make sure we do right Next
+    _SensTrigger EchoL, TrigL, EchoR, SensLastR
+    
+skipL:
+    ;_SensTriggerLeft
+    ;_SensTriggerRight
+    
 TriggerDone: 
     bsf SensStatus,StatusTrig ; this set's trigger stop state we need to clean
     ; up and stop the sensor on the next cycle
