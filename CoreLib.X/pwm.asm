@@ -43,6 +43,9 @@ PwmInit:
     addlw   .6	; this is to make 1 a usable setting
     MOVWF   PWMONR
     
+    BCF PWMPORT,PWMLCE
+    BCF PWMPORT,PWMRCE
+    
     BCF	PWMPORT,PWMLIN
     BTFSC PWMCONL,6
     BSF PWMPORT,PWMLIN
