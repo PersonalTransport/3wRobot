@@ -45,12 +45,18 @@ PwmInit:
     
     BCF PWMPORT,PWMLCE
     BCF PWMPORT,PWMRCE
+    NOP ; slow down switching just a bit
+    NOP ; slow down switching just a bit
     
     BCF	PWMPORT,PWMLIN
+    NOP ; slow down switching just a bit
+    NOP ; slow down switching just a bit
     BTFSC PWMCONL,6
     BSF PWMPORT,PWMLIN
-    
+    NOP ; slow down switching just a bit
+    NOP ; slow down switching just a bit
     BCF	PWMPORT,PWMRIN
+    
     BTFSC PWMCONR,6
     BSF PWMPORT,PWMRIN
     
