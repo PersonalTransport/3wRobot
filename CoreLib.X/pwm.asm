@@ -34,29 +34,23 @@ PwmInit:
     ;get loncount
     movf    PWMCONL,0
     andlw   0x1F
-    addlw   .6	; this is to make 1 a usable setting
+    ;addlw   .6	; this is to make 1 a usable setting
     MOVWF   PWMONL
     
     ;get roncount
     MOVF   PWMCONR,0
     ANDLW   0x1F
-    addlw   .6	; this is to make 1 a usable setting
+    ;addlw   .6	; this is to make 1 a usable setting
     MOVWF   PWMONR
     
     BCF PWMPORT,PWMLCE
     BCF PWMPORT,PWMRCE
-    NOP ; slow down switching just a bit
-    NOP ; slow down switching just a bit
     
     BCF	PWMPORT,PWMLIN
-    NOP ; slow down switching just a bit
-    NOP ; slow down switching just a bit
     BTFSC PWMCONL,6
     BSF PWMPORT,PWMLIN
-    NOP ; slow down switching just a bit
-    NOP ; slow down switching just a bit
-    BCF	PWMPORT,PWMRIN
     
+    BCF	PWMPORT,PWMRIN 
     BTFSC PWMCONR,6
     BSF PWMPORT,PWMRIN
     
@@ -76,6 +70,7 @@ PwmUpdate:
     BCF PWMPORT,PWMLCE
     BRA PWMLeftDone
 PWMLeftNop:
+
     NOP
     NOP
     NOP
@@ -97,6 +92,7 @@ PWMLeftDone:
     BCF PWMPORT,PWMRCE
     BRA PWMRightDone
 PWMRightNop:
+
     nop
     nop
     nop

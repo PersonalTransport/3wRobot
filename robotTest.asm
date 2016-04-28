@@ -59,7 +59,7 @@ INIT:
     movwf PWMCONR
     
     bcf TRISB,RB5
-    bsf PORTB,RB5
+    bcf PORTB,RB5
     clrf RobotState
     
     clrf PrevSensL
@@ -104,16 +104,40 @@ Start:
     
     movlw 0x00
     movwf PWMCONR
-MainL: 
+Forward: 
    
     bcf PORTB,RB5
+    movlw 0xF4
+    movwf PWMCONL
+    movwf PWMCONR
+
+
+    
+MainL:
     movlw .2
     cpfsgt SensLastL ; continue to go forward unless we should backup 
-    bsf PORTB,RB5
+    bra Backup
+    
+    cpfsgt SensLastR ; continue to go forward unless we should backup 
+    bra Backup
     
     ;bsf PORTB,RB5 ; make sure light is on since we are in forward state.
     bra MainL
+    
+Backup:
+    movlw 0x00
+    movwf PWMCONL
+    movwf PWMCONR
+    bsf PORTB,RB5
 
+BackL:
+    cpfslt SensLastL
+    bra Forward
+    
+    bra Backup
+    ; loop here till reset
+DoneLoop:nop
+    bra DoneLoop
   
 Delay: MOVLW .200		    ;Loop 5 times for .5 seconds
     MOVWF 0x81
