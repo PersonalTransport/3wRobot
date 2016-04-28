@@ -134,7 +134,7 @@ BackL:
     cpfslt SensLastL
     bra Forward
     
-;    bra Backup
+    bra Backup
     ; loop here till reset
 DoneLoop:nop
     bra DoneLoop
