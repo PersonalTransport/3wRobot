@@ -126,15 +126,15 @@ MainL:
     
 Backup:
     movlw 0x00
-    movwf PWMCONL
-    movwf PWMCONR
+    clrf PWMCONL
+    clrf PWMCONR
     bsf PORTB,RB5
 
 BackL:
     cpfslt SensLastL
     bra Forward
     
-    bra Backup
+;    bra Backup
     ; loop here till reset
 DoneLoop:nop
     bra DoneLoop
