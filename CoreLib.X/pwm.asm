@@ -26,8 +26,7 @@ PwmLoop:
     bra PwmInit
     return
     
-PwmInit:
-    ; do init 
+PwmInit: 
     movlw   0x32
     movwf   PWMCOUNT
     
@@ -55,58 +54,34 @@ PwmInit:
     BSF PWMPORT,PWMRIN
     
     BRA	    PWMDONE
+
+
+_DoPWM macro PwmCon, PwmOn, EnableBit
+    local _pwmStop,_pwmOn,_pwmOnDec,_pwmStop,_pwmDone
+    btfss PwmCon,7  ;If the motor should be off let's ensure that it's off
+    bra _pwmStop
+    
+    btfss PwmCon,7  ;this should force us on if it is off, assuming we didn't 
+    bra _pwmOn
+    
+    tstfsz PwmOn    ;now we see if we have cycles we should be on remaining.
+    bra _pwmOnDec
+    
+    bra _pwmStop    ;we should be off for the rest of the cycle let's verify
+_pwmStop:
+    bcf PWMPORT,EnableBit
+    bra _pwmDone
+_pwmOnDec:
+    decf _pwmOn	    ; decrement the count of remaining cycles
+_pwmOn:
+    bsf PWMPORT,EnableBit
+_pwmDone:
+    endm
     
 PwmUpdate:
-    ; update Left motor
-    BTFSS PWMCONL,7
-    BRA PWMLeftNop
-  
-    BTFSS PWMCONL,5
-    BRA PWMTurnLOn
-    
-    TSTFSZ PWMONL
-    BRA PWMDecL
-   
-    BCF PWMPORT,PWMLCE
-    BRA PWMLeftDone
-PWMLeftNop:
-
-    NOP
-    NOP
-    NOP
-    NOP ; these nops are to balance timing so all cycles are the same
-    BRA PWMLeftDone
-PWMDecL: DECF PWMONL,1
-	NOP ; to balance
-PWMTurnLOn: BSF PWMPORT,PWMLCE
-PWMLeftDone:   
-    ; update Right motor
-    BTFSS PWMCONR,7
-    BRA PWMRightNop
-    BTFSS PWMCONR,5
-    BRA PWMTurnROn
-    
-    TSTFSZ PWMONR
-    BRA PWMDecR
-   
-    BCF PWMPORT,PWMRCE
-    BRA PWMRightDone
-PWMRightNop:
-
-    nop
-    nop
-    nop
-    nop ; these nops are to balance timing so all cycles are the same
-    bra PWMRightDone
-PWMDecR: DECF PWMONR,1  
-    nop ; to balance
-PWMTurnROn: BSF PWMPORT,PWMRCE
-PWMRightDone:   
-
-   ; MOVLW 0x16	; 156 should be 100 cycles
-   ; MOVWF TMR2
-    
-    decf PWMCOUNT,1
+    _DoPWM PWMCONL,PWMONL,PWMLCE    ; Do left wheel pwm
+    _DoPWM PWMCONR,PWMONR,PWMRCE    ; Do right wheel pwm
+    decf PWMCOUNT,1		    ;Decrement count to make sure things get changed;
 PWMDONE:
     return
 

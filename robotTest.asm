@@ -104,38 +104,7 @@ Start:
     
     movlw 0x00
     movwf PWMCONR
-Forward: 
-   
-    bcf PORTB,RB5
-    movlw 0xF4
-    movwf PWMCONL
-    movwf PWMCONR
-
-
-    
-MainL:
-    movlw .2
-    cpfsgt SensLastL ; continue to go forward unless we should backup 
-    bra Backup
-    
-    cpfsgt SensLastR ; continue to go forward unless we should backup 
-    bra Backup
-    
-    ;bsf PORTB,RB5 ; make sure light is on since we are in forward state.
-    bra MainL
-    
-Backup:
-    movlw 0x00
-    clrf PWMCONL
-    clrf PWMCONR
-    bsf PORTB,RB5
-
-BackL:
-    cpfslt SensLastL
-    bra Forward
-    
-    bra Backup
-    ; loop here till reset
+ 
 DoneLoop:nop
     bra DoneLoop
   
