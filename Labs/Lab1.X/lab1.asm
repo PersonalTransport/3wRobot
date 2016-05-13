@@ -39,15 +39,13 @@ Main:
     CALL Delay
     BCF PORTB,4 ;Disable Right
     BCF PORTB,3 ;Disable Left Motor
-    
-    MOVFF PORTA, 0x82 ; prime for first cycle.
+    MOVFF PORTA, 0x82 ; prime for first loop cycle.
 Loop: BTG   PORTB,5	    ; Toggle LED
     CALL Delay 
     MOVF PORTA, 0	; W = PORTA
     XORWF 0x82, 0		; W = W XOR LASTIN
     BZ Loop			; Loop if zero
     BRA Main	    ; Something changed so assume it is switch and restart
-    
 Delay: MOVLW .5		    ;Loop 5 times for .5 seconds
     MOVWF 0x81
 DelayLoop:CALL DelayOnce

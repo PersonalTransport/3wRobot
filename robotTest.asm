@@ -67,44 +67,51 @@ INIT:
    
 
 Start:
-    ;GO LEFT
-    movlw 0xFF
-    movwf PWMCONL
+;    ;GO LEFT
+;    movlw 0xFF
+;    movwf PWMCONL
+;    
+;    movlw 0xBF
+;    movwf PWMCONR
+;    
+;    call Delay
+;    call Delay
+;    
+;    ;GO RIGHT
+;    movlw 0xBF
+;    movwf PWMCONL
+;    
+;    movlw 0xFF
+;    movwf PWMCONR
+;    
+;    call Delay
+;    call Delay
+;    call Delay
+;    
+;    ;GO LEFT
+;    movlw 0xFF
+;    movwf PWMCONL
+;    
+;    movlw 0xBF
+;    movwf PWMCONR
+;    
+;    call Delay
+;    call Delay
+;    
+;    ;GO Straight
+;    movlw 0x00
+;    movwf PWMCONL
+;    
+;    movlw 0x00
+;    movwf PWMCONR
+Loop:
+    bcf PORTB,RB5
+    movlw .2
+    cpfsgt SensLastR
+    bsf PORTB,RB5
+    bra Loop
     
-    movlw 0xBF
-    movwf PWMCONR
     
-    call Delay
-    call Delay
-    
-    ;GO RIGHT
-    movlw 0xBF
-    movwf PWMCONL
-    
-    movlw 0xFF
-    movwf PWMCONR
-    
-    call Delay
-    call Delay
-    call Delay
-    
-    ;GO LEFT
-    movlw 0xFF
-    movwf PWMCONL
-    
-    movlw 0xBF
-    movwf PWMCONR
-    
-    call Delay
-    call Delay
-    
-    ;GO Straight
-    movlw 0x00
-    movwf PWMCONL
-    
-    movlw 0x00
-    movwf PWMCONR
- 
 DoneLoop:nop
     bra DoneLoop
   
