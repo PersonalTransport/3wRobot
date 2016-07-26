@@ -27,12 +27,12 @@ Click the add library project folder button, choose the CoreLib.x and click Add.
 ## Using the library
 
 You can start with the RobotTest.asm file as an example or build your own, the key things to remember are
-1) you must set the speed to 4mhz unless you modify the library
+1. you must set the speed to 4mhz unless you modify the library
 ```assembly
 	movlw   0x60	
 	iorwf   OSCCON	; Set to 4mhz
 ```
-2) You have to call core init and enable basic interrupt support in order to get the timing loop to work.
+2. You have to call core init and enable basic interrupt support in order to get the timing loop to work.
 ```assembly
 ; Enable interupts and get ready for sub init code
 	bsf INTCON, GIE ; enable interrupts
@@ -41,7 +41,7 @@ You can start with the RobotTest.asm file as an example or build your own, the k
 	;Do pwm init code.
 	call CoreDoInit
 ```
-3) You then need to add something like this for your interrupt code, along with the required directives pointing your interrupt to this location this does the pulse width modulation code for the motors and reads the sensors every 30ms as long as you follow this style of code, you should be able to have your own high priority interrupts.
+3. You then need to add something like this for your interrupt code, along with the required directives pointing your interrupt to this location this does the pulse width modulation code for the motors and reads the sensors every 30ms as long as you follow this style of code, you should be able to have your own high priority interrupts.
 ```assembly
 HPRIO:
 	btfsc PIR1, TMR2IF ; high priority loop
@@ -54,6 +54,10 @@ RobotL: call CoreDoLoop ; PWM_LOOP is responsible to clear the flag.
 	bra HPRIO	; return to HPRIO in case other interrupts need to be processed.
 ```
 
+4. at this point if you program te EDBot and run, you should hear a rapid clicking sound from the sensor, this let's you know that the code is sending triggers, if you don't hear anything you should look over your code carefully and ensure that you have interrupts enabled and have set the code entry point for the high priority interrupt correctly.
+
+5. **should explain here how to adjust pwm settings for each wheel
+6. **should explain here where I put the sensor data and how to interpret it**
 
 
 
