@@ -16,8 +16,11 @@ And of course you should have access to an EDBot to use.
 The EDBot repository contains everything you need to verify the function of the library if you checkout / download the entire repository and open it in XCode as a project.
 if you want to integrate the library into your own existing project you want to download or checkout just the CoreLib.X folder and put this inside the root folder of your existing project.
 you then need to go to your projects properties menu and go to the library tab
+
 ![alt text](https://github.com/PersonalTransport/EDbot/blob/master/img/install_01.png "Library Settings")
+
 Click the add library project folder button, choose the CoreLib.x and click Add. The default settings should be fine. After you hit Add you should have something like this.
+
 ![alt text](https://github.com/PersonalTransport/EDbot/blob/master/img/install_02.png "Library Settings")
 
 
