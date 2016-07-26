@@ -24,12 +24,20 @@ StatusCount equ 2
 StatusDone equ 3
 
 ;change this if you want different OUTPUT pins to be used.
-SensPort equ PORTB
-TrigL equ RB0
-EchoL equ RB1
-TrigR equ RB2
-EchoR equ RB3    
-    
+#define __TrigL PORTA,RA1
+#define __EchoL PORTA,RA0
+#define __TrigR PORTA,RA4
+#define __EchoR PORTB,RB2    
+
+_TrigL equ RA1
+_TrigR equ RA4
+_EchoL equ RA0
+_EchoR equ RB2
+_EchoLTris equ TRISA
+_TrigLTris equ TRISA
+_EchoRTris equ TRISB
+_TrigRTris equ TRISA
+
 #endif ;___SENS_INC__
 
 

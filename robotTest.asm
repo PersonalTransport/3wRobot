@@ -67,75 +67,51 @@ INIT:
    
 
 Start:
-    ;GO LEFT
-    movlw 0xFF
-    movwf PWMCONL
-    
-    movlw 0xBF
-    movwf PWMCONR
-    
-    call Delay
-    call Delay
-    
-    ;GO RIGHT
-    movlw 0xBF
-    movwf PWMCONL
-    
-    movlw 0xFF
-    movwf PWMCONR
-    
-    call Delay
-    call Delay
-    call Delay
-    
-    ;GO LEFT
-    movlw 0xFF
-    movwf PWMCONL
-    
-    movlw 0xBF
-    movwf PWMCONR
-    
-    call Delay
-    call Delay
-    
-    ;GO Straight
-    movlw 0x00
-    movwf PWMCONL
-    
-    movlw 0x00
-    movwf PWMCONR
-Forward: 
-   
+;    ;GO LEFT
+;    movlw 0xFF
+;    movwf PWMCONL
+;    
+;    movlw 0xBF
+;    movwf PWMCONR
+;    
+;    call Delay
+;    call Delay
+;    
+;    ;GO RIGHT
+;    movlw 0xBF
+;    movwf PWMCONL
+;    
+;    movlw 0xFF
+;    movwf PWMCONR
+;    
+;    call Delay
+;    call Delay
+;    call Delay
+;    
+;    ;GO LEFT
+;    movlw 0xFF
+;    movwf PWMCONL
+;    
+;    movlw 0xBF
+;    movwf PWMCONR
+;    
+;    call Delay 
+;    call Delay
+;    
+;    ;GO Straight
+;    movlw 0x00
+;    movwf PWMCONL
+;    
+;    movlw 0x00
+;    movwf PWMCONR
+Loop:
     bcf PORTB,RB5
-    movlw 0xF4
-    movwf PWMCONL
-    movwf PWMCONR
-
-
-    
-MainL:
     movlw .2
-    cpfsgt SensLastL ; continue to go forward unless we should backup 
-    bra Backup
-    
-    cpfsgt SensLastR ; continue to go forward unless we should backup 
-    bra Backup
-    
-    ;bsf PORTB,RB5 ; make sure light is on since we are in forward state.
-    bra MainL
-    
-Backup:
-    movlw 0x00
-    clrf PWMCONL
-    clrf PWMCONR
+    cpfsgt SensLastR
     bsf PORTB,RB5
-
-BackL:
-    cpfslt SensLastL
-    bra Forward
+    bra Loop
     
-    bra Backup
-    ; loop here till reset
+    
 DoneLoop:nop
     bra DoneLoop
   

@@ -11,8 +11,12 @@ SensSetup:
     clrf SensLastR
     clrf SensStatus
     
-    movlw 0x0A
-    movwf TRISB ; setup inputs and outputs for PORT B for Sensor Triggering
+    ; Setup the bits for 
+    bcf _TrigLTris,_TrigL
+    bcf _TrigRTris,_TrigR
+    bsf _EchoLTris,_EchoL
+    bsf _EchoRTris,_EchoR
+    
     clrf PORTB;
     bcf PORTB,RB5
     
@@ -64,26 +68,26 @@ SkipAgain:
     return
     
 SensEndTrigger:
-    bcf SensPort,TrigL
-    bcf SensPort,TrigR
+    bcf __TrigL
+    bcf __TrigR
     bcf SensStatus,StatusTrig ; turn off trigger state
     bsf SensStatus,StatusSkip ; turn on skip state
     return
 
-_SensKill macro echoBit, SensLast
-    bcf TRISB,echoBit
-    bcf SensPort,echoBit
-    nop ; adding a couple nops to test
-    nop ; this may provide a cleaner kill
-    bsf TRISB,echoBit ; Set input 
-    setf SensLast
+_SensKill macro echoTris, echoPort, echoBit, SensLast
+;    bcf echoTris,echoBit
+;    bcf echoPort,echoBit
+;    nop ; adding a couple nops to test
+;    nop ; this may provide a cleaner kill
+;    bsf echoTris,echoBit ; Set input 
+;    setf SensLast
     endm
 
 _SensTriggerRight macro
     local skip
     btfsc SensStatus,7
     bra skip
-    _SensTrigger EchoL, TrigL, EchoR, SensLastR
+    _SensTrigger __EchoL, __TrigL, __EchoR, SensLastR
     bsf SensStatus,7
     skip:
     endm
@@ -93,28 +97,28 @@ _SensTriggerLeft macro
     local skip
     btfsc SensStatus,7
     bra skip
-    _SensTrigger EchoR, TrigR, EchoL, SensLastL
+    _SensTrigger __EchoR, __TrigR, __EchoL, SensLastL
     bcf SensStatus,7
     skip:
     endm
 
-_SensTrigger macro NewEchoBit, NewTrigBit, OldEchoBit, LastSensDest
+_SensTrigger macro NEPort, NEBit, NTPort, NTBit, OETris, OEPort, OEBit, LastSensDest
     local continue,kill,skip
     
     ;Check if old sensor is still on
-    btfsc SensPort,OldEchoBit ; if this is still high we need to kill it now
+    btfsc OEPort, OEBit ; if this is still high we need to kill it now
     bra kill
     
 continue:
-    bsf TRISB,NewEchoBit ; just to be absolutely sure its at input
-    bsf SensPort,NewTrigBit ; set trigger, this gets turned off at next cycle
+    bsf NEPort, NEBit ; just to be absolutely sure its at input
+    bsf NTPort, NTBit ; set trigger, this gets turned off at next cycle
     
     movlw 0x80
     andwf SensStatus
     bra TriggerDone
     
 kill:
-    _SensKill OldEchoBit,LastSensDest ; this is fun, macro from macro
+    _SensKill OETris, OEPort, OEBit, LastSensDest ; this is fun, macro from macro
     bra continue
     endm
     
@@ -123,7 +127,7 @@ SensTrigger:
     btfsc SensStatus,7
     bra skipR
     bsf SensStatus,7; set this first to make sure we do left Next
-    _SensTrigger EchoR, TrigR, EchoL, SensLastL
+    _SensTrigger __EchoR, __TrigR, _EchoLTris, __EchoL, SensLastL
     
 skipR:
     
@@ -131,7 +135,7 @@ skipR:
     btfss SensStatus,7
     bra skipL
     bcf SensStatus,7; set this first to make sure we do right Next
-    _SensTrigger EchoL, TrigL, EchoR, SensLastR
+    _SensTrigger __EchoL, __TrigL, _EchoRTris, __EchoR, SensLastR
     
 skipL:
     ;_SensTriggerLeft
@@ -150,14 +154,14 @@ SensRead:
     
 SensReadL:
     ;check if trigger is on
-    btfss SensPort,EchoL
+    btfss __EchoL
     bra clearTrigger ; it went off sometime between the last update and now so we do not increment
     incf SensCount
     bra SensDone
     
 SensReadR:
      ;check if trigger is on
-    btfss SensPort,EchoR
+    btfss __EchoR
     bra clearTrigger ; it went off sometime between the last update and now so we do not increment
     incf SensCount
     bra SensDone
