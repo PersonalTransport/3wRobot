@@ -37,18 +37,31 @@ End with an example of getting some data out of the system or using it for a lit
 You can start with the RobotTest.asm file as an example or build your own, the key things to remember are
 1) you must set the speed to 4mhz unless you modify the library
 ```assembly
-movlw   0x60	
-    iorwf   OSCCON	; Set to 4mhz
+	movlw   0x60	
+	iorwf   OSCCON	; Set to 4mhz
 ```
 2) You have to call core init and enable basic interrupt support in order to get the timing loop to work.
 ```assembly
 ; Enable interupts and get ready for sub init code
-    bsf INTCON, GIE ; enable interrupts
-    bsf INTCON, PEIE ; enable all interrupts
+	bsf INTCON, GIE ; enable interrupts
+	bsf INTCON, PEIE ; enable all interrupts
     
-    ;Do pwm init code.
-    call CoreDoInit
+	;Do pwm init code.
+	call CoreDoInit
 ```
+3) You then need to add something like this for your interrupt code, along with the required directives pointing your interrupt to this location this does the pulse width modulation code for the motors and reads the sensors every 30ms as long as you follow this style of code, you should be able to have your own high priority interrupts.
+```assembly
+HPRIO:
+	btfsc PIR1, TMR2IF ; high priority loop
+	bra RobotL
+   
+	retfie ; Return from interrupt
+
+RobotL: call CoreDoLoop ; PWM_LOOP is responsible to clear the flag.
+	;why not clear here
+	bra HPRIO	; return to HPRIO in case other interrupts need to be processed.
+```
+
 
 
 
