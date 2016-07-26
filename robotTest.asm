@@ -95,7 +95,7 @@ Start:
 ;    movlw 0xBF
 ;    movwf PWMCONR
 ;    
-;    call Delay
+;    call Delay 
 ;    call Delay
 ;    
 ;    ;GO Straight

@@ -75,12 +75,12 @@ SensEndTrigger:
     return
 
 _SensKill macro echoTris, echoPort, echoBit, SensLast
-    bcf echoTris,echoBit
-    bcf echoPort,echoBit
-    nop ; adding a couple nops to test
-    nop ; this may provide a cleaner kill
-    bsf echoTris,echoBit ; Set input 
-    setf SensLast
+;    bcf echoTris,echoBit
+;    bcf echoPort,echoBit
+;    nop ; adding a couple nops to test
+;    nop ; this may provide a cleaner kill
+;    bsf echoTris,echoBit ; Set input 
+;    setf SensLast
     endm
 
 _SensTriggerRight macro
