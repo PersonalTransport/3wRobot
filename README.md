@@ -36,12 +36,12 @@ End with an example of getting some data out of the system or using it for a lit
 
 You can start with the RobotTest.asm file as an example or build your own, the key things to remember are
 1) you must set the speed to 4mhz unless you modify the library
-```
+```assembly
 movlw   0x60	
     iorwf   OSCCON	; Set to 4mhz
 ```
 2) You have to call core init and enable basic interrupt support in order to get the timing loop to work.
-```
+```assembly
 ; Enable interupts and get ready for sub init code
     bsf INTCON, GIE ; enable interrupts
     bsf INTCON, PEIE ; enable all interrupts
