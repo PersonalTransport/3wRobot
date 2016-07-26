@@ -8,29 +8,16 @@ This library is an advanced example of how to use the EDBot robot developed by s
 
 ### Prerequisities
 
-What things you need to install the software and how to install them
-
-```
-Give examples
-```
+In order to use this library you should be familiar with MPLAB X Ide and have it installed, and you should allready know how to program the EDBot.
+And of course you should have access to an EDBot to use.
 
 ### Installing
 
-A step by step series of examples that tell you have to get a development env running
+The EDBot repository contains everything you need to verify the function of the library if you checkout / download the entire repository and open it in XCode as a project.
+if you want to integrate the library into your own existing project you want to download or checkout just the CoreLib.X folder and put this inside the root folder of your existing project.
+you then need to go to your projects properties menu and go to the librarys tab like this
+![alt text](https://github.com/PersonalTransport/EDbot/blob/master/img/install_01.png "Library Settings")
 
-Stay what the step will be
-
-```
-Give the example
-```
-
-And repeat
-
-```
-until finished
-```
-
-End with an example of getting some data out of the system or using it for a little demo
 
 ## Using the library
 
