@@ -2,14 +2,11 @@
 
 This library is an advanced example of how to use the EDBot robot developed by students at Clark College. The library operates on a timing loop and it is quite easy to add your own code into this loop
 
-## Getting Started
-
-*Can I assume they allready have matlab or should I walk through that*
-
 ### Prerequisities
 
 In order to use this library you should be familiar with MPLAB X Ide and have it installed, and you should allready know how to program the EDBot.
 And of course you should have access to an EDBot to use.
+it would be helpful to know something about the mpasm features I use such as [macro's](docs/macros.md) and [relocatable code](docs/code.md).
 
 ### Installing
 
