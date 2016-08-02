@@ -53,8 +53,14 @@ RobotL: call CoreDoLoop ; PWM_LOOP is responsible to clear the flag.
 
 4. at this point if you program te EDBot and run, you should hear a rapid clicking sound from the sensor, this let's you know that the code is sending triggers, if you don't hear anything you should look over your code carefully and ensure that you have interrupts enabled and have set the code entry point for the high priority interrupt correctly.
 
-5. **should explain here how to adjust pwm settings for each wheel
-6. **should explain here where I put the sensor data and how to interpret it**
+5. Once you have the library initiated you can change the pwm settings for each wheel by writing to the PWMCONL and PWMCONR memory locations like so
+```assembly
+movlw 0xBF
+movwf PWMCONL
+```
+PWMCONL and PWMCONR are both 8 bit locations, the first bit turns the motor on or off, the second bit enables pwm or disables it, eg 10 goes full speed, the third bit is 1 for forward 0 for reverse, the final 4 bits controll the speed, from 00 to FF, with speeds below about 0A not actually moving the motor, to figure out your percent of PWM multiply your value by 2, this gives you an effective range of about 20%->64%
+
+6. Each complete cycle, or about 20 times per second the sensor data is wrote to SensLastL and SensLastR this number is approximatly 4 inches for each integer increment, so a 3 represents an object about 12 inches from the sensor, and a 5 represents about 20 inches, FF means the sensor has timed out and is not producing reliable data, and 00 represents anything below 4 inches.
 
 
 
