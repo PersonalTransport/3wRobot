@@ -119,12 +119,12 @@ SensLoop:
     
 BackLeft:
     bsf PORTB,RB5
-    movlw .3
+    movlw .4
     cpfslt SensLastL
     bra ChangeDirection
     
     ;Go Back Left
-    movlw 0xD0
+    movlw 0xC0
     movwf PWMCONL
 ;    
     movlw 0xDF
@@ -133,7 +133,19 @@ BackLeft:
     bra BackLeft
     
 BackRight:
+    bsf PORTB,RB5
+    movlw .4
+    cpfslt SensLastR
     bra ChangeDirection
+    
+    ;Go Back Left
+    movlw 0xC0
+    movwf PWMCONR
+;    
+    movlw 0xDF
+    movwf PWMCONL
+    call Delay
+    bra BackRight
     
 DoneLoop:nop
     bra DoneLoop
