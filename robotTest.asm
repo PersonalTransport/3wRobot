@@ -15,10 +15,7 @@
 
 .roboData udata 
 RobotState equ 0x80
-PrevSensL equ 0x81
-CurSensL equ 0x82
-PrevSensR equ 0x83
-CurSensR equ 0x84
+SensDelay equ 0x85
  
 ORG.   code 0x000 ; Executes after reset
     goto INIT
@@ -62,8 +59,8 @@ INIT:
     bcf PORTB,RB5
     clrf RobotState
     
-    clrf PrevSensL
-    clrf PrevSensR
+;    clrf PrevSensL
+;    clrf PrevSensR
    
 
 Start:
@@ -97,20 +94,46 @@ Start:
 ;    
 ;    call Delay 
 ;    call Delay
+
+ChangeDirection:
+    movlw 0xF0
+    movwf PWMCONL
 ;    
-;    ;GO Straight
-;    movlw 0x00
-;    movwf PWMCONL
-;    
-;    movlw 0x00
-;    movwf PWMCONR
-Loop:
+    movlw 0xFF
+    movwf PWMCONR
+    
+    movlw .10
+    movwf SensDelay
+SensLoop:
     bcf PORTB,RB5
     movlw .2
-    cpfsgt SensLastR
-    bsf PORTB,RB5
-    bra Loop
+    cpfsgt SensLastL
+    bra BackLeft
     
+    cpfsgt SensLastR
+    bra BackRight
+    
+    decf SensDelay
+    BNZ SensLoop
+    bra ChangeDirection
+    
+BackLeft:
+    bsf PORTB,RB5
+    movlw .3
+    cpfslt SensLastL
+    bra ChangeDirection
+    
+    ;Go Back Left
+    movlw 0xD0
+    movwf PWMCONL
+;    
+    movlw 0xDF
+    movwf PWMCONR
+    call Delay
+    bra BackLeft
+    
+BackRight:
+    bra ChangeDirection
     
 DoneLoop:nop
     bra DoneLoop

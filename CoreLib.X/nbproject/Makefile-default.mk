@@ -38,6 +38,12 @@ DEBUGGABLE_SUFFIX=
 FINAL_IMAGE=dist/${CND_CONF}/${IMAGE_TYPE}/CoreLib.X.${OUTPUT_SUFFIX}
 endif
 
+ifeq ($(COMPARE_BUILD), true)
+COMPARISON_BUILD=
+else
+COMPARISON_BUILD=
+endif
+
 # Object Directory
 OBJECTDIR=build/${CND_CONF}/${IMAGE_TYPE}
 
@@ -86,7 +92,7 @@ ${OBJECTDIR}/core.o: core.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/core.o.d 
 	@${RM} ${OBJECTDIR}/core.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/core.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/core.lst\\\" -e\\\"${OBJECTDIR}/core.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/core.o\\\" \\\"core.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/core.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/core.lst\\\" -e\\\"${OBJECTDIR}/core.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/core.o\\\" \\\"core.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/core.o"
 	@${FIXDEPS} "${OBJECTDIR}/core.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -94,7 +100,7 @@ ${OBJECTDIR}/pwm.o: pwm.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pwm.o.d 
 	@${RM} ${OBJECTDIR}/pwm.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/pwm.lst\\\" -e\\\"${OBJECTDIR}/pwm.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/pwm.o\\\" \\\"pwm.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/pwm.lst\\\" -e\\\"${OBJECTDIR}/pwm.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/pwm.o\\\" \\\"pwm.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/pwm.o"
 	@${FIXDEPS} "${OBJECTDIR}/pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -102,7 +108,7 @@ ${OBJECTDIR}/sens.o: sens.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/sens.o.d 
 	@${RM} ${OBJECTDIR}/sens.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/sens.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/sens.lst\\\" -e\\\"${OBJECTDIR}/sens.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/sens.o\\\" \\\"sens.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/sens.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -d__DEBUG -d__MPLAB_DEBUGGER_SIMULATOR=1 -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/sens.lst\\\" -e\\\"${OBJECTDIR}/sens.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/sens.o\\\" \\\"sens.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/sens.o"
 	@${FIXDEPS} "${OBJECTDIR}/sens.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -111,7 +117,7 @@ ${OBJECTDIR}/core.o: core.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/core.o.d 
 	@${RM} ${OBJECTDIR}/core.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/core.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/core.lst\\\" -e\\\"${OBJECTDIR}/core.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/core.o\\\" \\\"core.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/core.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/core.lst\\\" -e\\\"${OBJECTDIR}/core.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/core.o\\\" \\\"core.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/core.o"
 	@${FIXDEPS} "${OBJECTDIR}/core.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -119,7 +125,7 @@ ${OBJECTDIR}/pwm.o: pwm.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/pwm.o.d 
 	@${RM} ${OBJECTDIR}/pwm.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/pwm.lst\\\" -e\\\"${OBJECTDIR}/pwm.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/pwm.o\\\" \\\"pwm.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/pwm.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/pwm.lst\\\" -e\\\"${OBJECTDIR}/pwm.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/pwm.o\\\" \\\"pwm.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/pwm.o"
 	@${FIXDEPS} "${OBJECTDIR}/pwm.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	
@@ -127,7 +133,7 @@ ${OBJECTDIR}/sens.o: sens.asm  nbproject/Makefile-${CND_CONF}.mk
 	@${MKDIR} "${OBJECTDIR}" 
 	@${RM} ${OBJECTDIR}/sens.o.d 
 	@${RM} ${OBJECTDIR}/sens.o 
-	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/sens.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/sens.lst\\\" -e\\\"${OBJECTDIR}/sens.err\\\" $(ASM_OPTIONS)   -o\\\"${OBJECTDIR}/sens.o\\\" \\\"sens.asm\\\" 
+	@${FIXDEPS} dummy.d -e "${OBJECTDIR}/sens.err" $(SILENT) -c ${MP_AS} $(MP_EXTRA_AS_PRE) -q -p$(MP_PROCESSOR_OPTION) -u  -l\\\"${OBJECTDIR}/sens.lst\\\" -e\\\"${OBJECTDIR}/sens.err\\\" $(ASM_OPTIONS)    -o\\\"${OBJECTDIR}/sens.o\\\" \\\"sens.asm\\\" 
 	@${DEP_GEN} -d "${OBJECTDIR}/sens.o"
 	@${FIXDEPS} "${OBJECTDIR}/sens.o.d" $(SILENT) -rsi ${MP_AS_DIR} -c18 
 	

@@ -16,9 +16,10 @@ PWMONR res 1 ; count of how many PWM cycles right should be on to reach desired 
  
 ;Port settings for PWM
 PWMPORT	equ PORTA
-PWMRIN	equ RA0
-PWMRCE	equ RA1
-PWMLIN	equ RA2
-PWMLCE	equ RA3
+PWMOnPORT equ PORTB
+PWMRIN	equ RA6
+PWMRCE	equ RB4
+PWMLIN	equ RA7
+PWMLCE	equ RB3
 	
 #endif ;___PWM_INC__

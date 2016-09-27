@@ -13,8 +13,10 @@ PwmSetup:
     clrf PWMONL
     clrf PWMONR
     
-    movlw 0x00	
+    movlw 0x0D	
     movwf TRISA ; set PortA To output.
+    movlw 0xC7
+    movwf TRISB
     clrf PORTA ; Clear port a to make sure that the motors start stopped.
     
     return
@@ -33,17 +35,17 @@ PwmInit:
     ;get loncount
     movf    PWMCONL,0
     andlw   0x1F
-    ;addlw   .6	; this is to make 1 a usable setting
+    addlw   .6	; this is to make 1 a usable setting
     MOVWF   PWMONL
     
     ;get roncount
     MOVF   PWMCONR,0
     ANDLW   0x1F
-    ;addlw   .6	; this is to make 1 a usable setting
+    addlw   .6	; this is to make 1 a usable setting
     MOVWF   PWMONR
     
-    BCF PWMPORT,PWMLCE
-    BCF PWMPORT,PWMRCE
+    BCF PWMOnPORT,PWMLCE
+    BCF PWMOnPORT,PWMRCE
     
     BCF	PWMPORT,PWMLIN
     BTFSC PWMCONL,6
@@ -61,7 +63,7 @@ _DoPWM macro PwmCon, PwmOn, EnableBit
     btfss PwmCon,7  ;If the motor should be off let's ensure that it's off
     bra _pwmStop
     
-    btfss PwmCon,7  ;this should force us on if it is off, assuming we didn't 
+    btfss PwmCon,6  ;If this bit is off we should always be on because PWM is disabled 
     bra _pwmOn
     
     tstfsz PwmOn    ;now we see if we have cycles we should be on remaining.
@@ -69,12 +71,12 @@ _DoPWM macro PwmCon, PwmOn, EnableBit
     
     bra _pwmStop    ;we should be off for the rest of the cycle let's verify
 _pwmStop:
-    bcf PWMPORT,EnableBit
+    bcf PWMOnPORT,EnableBit
     bra _pwmDone
 _pwmOnDec:
-    decf _pwmOn	    ; decrement the count of remaining cycles
+    decf PwmOn	    ; decrement the count of remaining cycles
 _pwmOn:
-    bsf PWMPORT,EnableBit
+    bsf PWMOnPORT,EnableBit
 _pwmDone:
     endm
     
@@ -82,6 +84,31 @@ PwmUpdate:
     _DoPWM PWMCONL,PWMONL,PWMLCE    ; Do left wheel pwm
     _DoPWM PWMCONR,PWMONR,PWMRCE    ; Do right wheel pwm
     decf PWMCOUNT,1		    ;Decrement count to make sure things get changed;
+    
+;PwmUpdate:
+;    ;local _pwmStop,_pwmOn,_pwmOnDec,_pwmStop,_pwmDone
+;    btfss PWMCONL,7  ;If the motor should be off let's ensure that it's off
+;    bra _pwmStop
+;    
+;    btfss PWMCONL,6  ;If this bit is off we should always be on because PWM is disabled 
+;    bra _pwmOn
+;    
+;    tstfsz PWMONL    ;now we see if we have cycles we should be on remaining.
+;    bra _pwmOnDec
+;    
+;    bra _pwmStop    ;we should be off for the rest of the cycle let's verify
+;_pwmStop:
+;    bcf PWMOnPORT,PWMLCE
+;    bra _pwmDone
+;_pwmOnDec:
+;    decf PWMONL	    ; decrement the count of remaining cycles
+;_pwmOn:
+;    bsf PWMOnPORT,PWMLCE
+;_pwmDone:
+;    
+;     decf PWMCOUNT,1
+;    
+    
 PWMDONE:
     return
 
